@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Jack's playground</title>
+        <title>Jack playground</title>
         <meta name="description" content="From the kitchen with love" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
