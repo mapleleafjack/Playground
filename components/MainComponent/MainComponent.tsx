@@ -21,7 +21,7 @@ const MainComponent: FC<ComponentProps> = ({ title }) => {
     };
 
     let body_component = <div>
-        I am the {active_tab} {data && JSON.stringify(data)}
+        I am the {active_tab} {data ? JSON.stringify(data) : "Loading data..."}
     </div>
 
     let component = <>
