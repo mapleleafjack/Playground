@@ -4,6 +4,8 @@
     border-radius: 0 10px 10px 0;
     padding: 20px;
     width: 80%;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .buttonPanel {
@@ -17,4 +19,14 @@
 
 .panelLayout {
     display: flex;
+}
+
+.card {
+    margin: 10px;
+
+    &:hover {
+        background-color: orange !important;
+        color: white;
+        transition: 200ms;
+    }
 }

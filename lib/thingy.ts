@@ -24,8 +24,8 @@ export const getThingies = async () => {
 export const deleteThingy = async (id: string) => {
     const db = await connectToDb()
     await db.$connect()
-    return await db.thingy.create({
-        data: {
+    return await db.thingy.delete({
+        where: {
             id: id
         }
     });

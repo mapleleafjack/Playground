@@ -16,3 +16,11 @@ export const addThingy = async (
 
     return response?.data;
 }
+
+export const removeThingy = async (
+    thingy_id: string
+): Promise<DataThingy> => {
+    const response = await axios.delete(`/api/jack_api/${thingy_id}`);
+
+    return response?.data;
+}
