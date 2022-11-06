@@ -1,11 +1,11 @@
-import { Post } from '@prisma/client';
+import { Post, Thingy } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getDataThingyById, getPosts } from '../../../lib/getData'
 import { DataThingy } from '../../../types';
 
 export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse<Post[]>
+    res: NextApiResponse<Thingy[]>
 ) {
     switch (req.method) {
         case 'GET':

@@ -18,7 +18,7 @@ export const getDataThingyById = async (
 export const getPosts = async () => {
     const prisma = new PrismaClient()
     await prisma.$connect()
-    const posts = await prisma.post.findMany()
+    const posts = await prisma.thingy.findMany()
 
     return posts;
 }
