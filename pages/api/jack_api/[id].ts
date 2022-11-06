@@ -1,5 +1,5 @@
 import { Thingy } from '@prisma/client';
-import { getThingies } from 'lib/getData';
+import { getThingies } from 'lib/thingy';
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(

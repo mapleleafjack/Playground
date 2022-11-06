@@ -1,10 +1,11 @@
 import { Button } from '@blueprintjs/core';
 import React, { FC, useEffect, useState } from 'react';
+import { DataThingy } from 'types';
 import { addThingy, getThingy } from 'utils/api/thingy';
 import s from './DatabaseOperatiosView.module.scss';
 
 const DatabaseOperationsView: FC = () => {
-    const [data, setData] = useState<Record<string, unknown>>();
+    const [data, setData] = useState<DataThingy[]>([]);
     const [loading, setLoading] = useState<Boolean>(false);
 
     useEffect(() => {
@@ -26,12 +27,13 @@ const DatabaseOperationsView: FC = () => {
         setLoading(true)
         try {
             let data = await addThingy("thingy");
-            setData(data)
+            setData([data])
         } catch (err) {
             console.log(err);
         }
         setLoading(false)
     };
+
 
     return (
         <div className={`${s.panelLayout}`}>
@@ -56,7 +58,13 @@ const DatabaseOperationsView: FC = () => {
             </div >
 
             <div className={`${s.panel}`}>
-                {loading ? "loading..." : (data ? JSON.stringify(data) : "Click to load data")}
+                {loading ? "loading..." : (data ? data.map((elm) =>
+                    <div>
+                        Id: <span>{elm.id}</span>
+                        <br />
+                        Name: <span>{elm.name}</span>
+                    </div>
+                ) : "Click to load data")}
             </div>
 
         </div>

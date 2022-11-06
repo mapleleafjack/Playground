@@ -21,6 +21,23 @@ export const getThingies = async () => {
     return posts;
 }
 
-export const deleteThingies = async () => {
+export const deleteThingy = async (id: string) => {
+    const db = await connectToDb()
+    await db.$connect()
+    return await db.thingy.create({
+        data: {
+            id: id
+        }
+    });
+}
 
+export const postThingy = async (name: string) => {
+    const db = await connectToDb()
+    await db.$connect()
+
+    return await db.thingy.create({
+        data: {
+            name: name
+        }
+    });
 }
