@@ -16,7 +16,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <MainComponent title="Jack's Next Playground" />
+      <MainComponent title="Jack's Next" />
 
       <footer className={styles.footer}>
         Thank you for paying attention
