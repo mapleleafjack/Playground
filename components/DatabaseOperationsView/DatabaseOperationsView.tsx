@@ -71,7 +71,7 @@ const DatabaseOperationsView: FC = () => {
 
             <div className={`${s.panel}`}>
                 {loading ? "loading..." : (data ? data.map((elm) =>
-                    <Card className={`${s.card}`} interactive={true} elevation={Elevation.TWO} onClick={() => {
+                    <Card key={elm.id} className={`${s.card}`} interactive={true} elevation={Elevation.TWO} onClick={() => {
                         deleteThingyCB(elm.id)
                     }}>
                         <h5>{elm.name}</h5>

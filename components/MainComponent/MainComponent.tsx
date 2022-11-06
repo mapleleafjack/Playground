@@ -10,7 +10,16 @@ const MainComponent: FC<ComponentProps> = ({ title }) => {
 
     const [active_tab, setActiveTab] = useState("database");
 
-    let body_component = active_tab == "database" ? <DatabaseOperationsView /> : "Loading data..."
+    const get_active_tab = () => {
+        switch (active_tab) {
+            case "database":
+                return <DatabaseOperationsView />
+            default:
+                return "Under construction"
+        }
+    }
+
+    let body_component = get_active_tab()
 
     let component = <>
         <Navbar>
@@ -28,9 +37,9 @@ const MainComponent: FC<ComponentProps> = ({ title }) => {
                 <Button
                     className="bp4-minimal"
                     icon="document"
-                    text="Files"
+                    text="MIDI"
                     onClick={() => {
-                        setActiveTab("files")
+                        setActiveTab("midi")
                     }}
                 />
             </Navbar.Group>
@@ -43,5 +52,7 @@ const MainComponent: FC<ComponentProps> = ({ title }) => {
 
     return component;
 };
+
+
 
 export default MainComponent;
