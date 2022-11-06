@@ -1,7 +1,6 @@
-import { Post, Thingy } from '@prisma/client';
+import { Thingy } from '@prisma/client';
+import { getThingies } from 'lib/getData';
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { getDataThingyById, getPosts } from '../../../lib/getData'
-import { DataThingy } from '../../../types';
 
 export default async function handler(
     req: NextApiRequest,
@@ -11,7 +10,7 @@ export default async function handler(
         case 'GET':
             try {
                 // let data = await getDataThingyById(req.query.id as string);
-                let data = await getPosts()
+                let data = await getThingies()
                 res.status(200).json(data);
             } catch (error) {
                 console.error(

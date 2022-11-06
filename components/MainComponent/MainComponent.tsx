@@ -1,6 +1,6 @@
 import { Alignment, Button, Navbar } from '@blueprintjs/core';
 import React, { FC, useState } from 'react';
-import { getThingy } from '../../utils/api/thingy';
+import { getThingy } from 'utils/api/thingy';
 
 interface ComponentProps {
     title: string;
