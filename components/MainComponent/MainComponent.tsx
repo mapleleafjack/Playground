@@ -1,28 +1,16 @@
 import { Alignment, Button, Navbar } from '@blueprintjs/core';
+import DatabaseOperationsView from 'components/DatabaseOperationsView/DatabaseOperationsView';
 import React, { FC, useState } from 'react';
-import { getThingy } from 'utils/api/thingy';
-
+import s from './MainComponent.module.scss';
 interface ComponentProps {
     title: string;
 }
 
 const MainComponent: FC<ComponentProps> = ({ title }) => {
 
-    const [active_tab, setActiveTab] = useState("home");
-    const [data, setData] = useState<Record<string, unknown>>();
+    const [active_tab, setActiveTab] = useState("database");
 
-    const callAPI = async () => {
-        try {
-            let data = await getThingy("thingy");
-            setData(data)
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
-    let body_component = <div>
-        I am the {active_tab} {data ? JSON.stringify(data) : "Loading data..."}
-    </div>
+    let body_component = active_tab == "database" ? <DatabaseOperationsView /> : "Loading data..."
 
     let component = <>
         <Navbar>
@@ -32,10 +20,9 @@ const MainComponent: FC<ComponentProps> = ({ title }) => {
                 <Button
                     className="bp4-minimal"
                     icon="home"
-                    text="Main"
+                    text="Database operations"
                     onClick={() => {
-                        setActiveTab("home")
-                        callAPI()
+                        setActiveTab("database")
                     }}
                 />
                 <Button
@@ -44,13 +31,14 @@ const MainComponent: FC<ComponentProps> = ({ title }) => {
                     text="Files"
                     onClick={() => {
                         setActiveTab("files")
-                        callAPI()
                     }}
                 />
             </Navbar.Group>
         </Navbar>
 
-        {body_component}
+        <div className={`${s.mainLayout}`} >
+            {body_component}
+        </div>
     </>
 
     return component;

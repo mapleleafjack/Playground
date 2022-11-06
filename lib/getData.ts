@@ -1,6 +1,6 @@
-import { PrismaClient } from '@prisma/client';
-import axios from 'axios';
 import { DataThingy } from 'types';
+import { connectToDb } from './db';
+
 
 export const getDataThingyById = async (
     thingy_id: string
@@ -15,9 +15,12 @@ export const getDataThingyById = async (
 };
 
 export const getThingies = async () => {
-    const prisma = new PrismaClient()
-    await prisma.$connect()
-    const posts = await prisma.thingy.findMany()
+    const db = await connectToDb()
+    const posts = await db.thingy.findMany()
 
     return posts;
+}
+
+export const deleteThingies = async () => {
+
 }
