@@ -9,8 +9,6 @@ export default async function handler(
     switch (req.method) {
         case 'POST':
             try {
-                console.log("posting thingy")
-
                 let data = await postThingy(req.query.name as string)
                 res.status(200).json(data);
             } catch (error) {
