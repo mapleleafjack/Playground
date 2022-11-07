@@ -7,15 +7,18 @@ interface ComponentProps {
 }
 
 const CanvasView: FC<ComponentProps> = ({ data }) => {
+    console.log(data)
     return (
-        <Canvas>
-            <ambientLight intensity={0.1} />
-            <directionalLight color="red" position={[0, 0, 5]} />
-            <mesh>
-                <boxGeometry />
-                <meshStandardMaterial />
-            </mesh>
-        </Canvas>
+        <Canvas style={{ background: "black" }}>
+            <ambientLight intensity={0.5} />
+            <spotLight position={[10, 0, 10]} angle={0.3} />
+            <>
+                <mesh position={[0, 0, 0]} scale={[1, 1, 1]} >
+                    <boxBufferGeometry attach="geometry" />
+                    <meshBasicMaterial attach="material" color="red" opacity={1} transparent />
+                </mesh>
+            </>
+        </Canvas >
 
     );
 };

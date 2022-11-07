@@ -16,7 +16,8 @@
 .canvasPanel {
     padding: 20px;
     margin: 10px;
-    border: 1px solid lightgrey
+    border: 1px solid lightgrey;
+    height: 75%;
 }
 
 .buttonPanel {
@@ -31,4 +32,5 @@
 
 .panelLayout {
     display: flex;
+    height: 80vh;
 }
