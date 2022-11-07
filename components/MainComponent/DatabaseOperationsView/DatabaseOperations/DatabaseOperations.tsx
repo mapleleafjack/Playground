@@ -9,7 +9,6 @@ interface ComponentProps {
 
 const DatabaseOperations: FC<ComponentProps> = ({ refreshData }) => {
 
-
     const addThingyCB = async () => {
         try {
             let new_elm = await addThingy("thingy");
