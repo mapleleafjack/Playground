@@ -1,23 +1,22 @@
 import { Button, Card, Elevation } from '@blueprintjs/core';
+import ElementCards from 'components/MainComponent/DatabaseOperationsView/ElementCards/ElementCards';
 import React, { FC, useEffect, useState } from 'react';
 import { DataThingy } from 'types';
 import { addThingy, getThingy, removeThingy } from 'utils/api/thingy';
+import CanvasView from './CanvasView/CanvasView';
 import s from './DatabaseOperatiosView.module.scss';
 
 const DatabaseOperationsView: FC = () => {
     const [data, setData] = useState<DataThingy[]>([]);
-    const [loading, setLoading] = useState<Boolean>(false);
 
     useEffect(() => {
-        getThingyCB()
+        refreshData()
     }, [])
 
-    const getThingyCB = async () => {
-        setLoading(true)
+    const refreshData = async () => {
         try {
             let data = await getThingy("thingy");
             setData(data)
-            setLoading(false)
 
         } catch (err) {
             console.log(err);
@@ -25,29 +24,23 @@ const DatabaseOperationsView: FC = () => {
     };
 
     const addThingyCB = async () => {
-        setLoading(true)
         try {
             let new_elm = await addThingy("thingy");
-            data.push(new_elm)
-            setData(data)
+            refreshData()
         } catch (err) {
             console.log(err);
         }
-        setLoading(false)
     };
 
     const deleteThingyCB = async (thingy_id: string) => {
-        setLoading(true)
         try {
             await removeThingy(thingy_id);
-
             setData(data.filter((elm) => {
                 return elm.id != thingy_id
             }))
         } catch (err) {
             console.log(err);
         }
-        setLoading(false)
     }
 
 
@@ -59,7 +52,7 @@ const DatabaseOperationsView: FC = () => {
                     icon="refresh"
                     text="Refresh database"
                     onClick={() => {
-                        getThingyCB()
+                        refreshData()
                     }}
                 />
                 <br />
@@ -74,16 +67,13 @@ const DatabaseOperationsView: FC = () => {
             </div >
 
             <div className={`${s.panel}`}>
-                {(data ? data.map((elm) =>
-                    <Card key={elm.id} className={`${s.card}`} interactive={true} elevation={Elevation.TWO} onClick={() => {
-                        deleteThingyCB(elm.id)
-                    }}>
-                        <h5>{elm.name}</h5>
-                        <p>Id:{elm.id}</p>
-                    </Card>
-                ) : "Click to load data")}
+                <div className={`${s.elementsPanel}`}>
+                    <ElementCards data={data} callback={deleteThingyCB} />
+                </div>
 
-                {data && data.length == 0 && "No thingies in the DB, add some"}
+                <div className={`${s.canvasPanel}`}>
+                    <CanvasView data={data} />
+                </div>
             </div>
 
         </div>

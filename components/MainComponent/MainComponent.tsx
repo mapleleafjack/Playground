@@ -1,5 +1,5 @@
 import { Alignment, Button, Navbar } from '@blueprintjs/core';
-import DatabaseOperationsView from 'components/DatabaseOperationsView/DatabaseOperationsView';
+import DatabaseOperationsView from 'components/MainComponent/DatabaseOperationsView/DatabaseOperationsView';
 import React, { FC, useState } from 'react';
 import s from './MainComponent.module.scss';
 interface ComponentProps {

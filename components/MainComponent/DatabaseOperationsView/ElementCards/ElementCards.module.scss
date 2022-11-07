@@ -1,0 +1,9 @@
+.card {
+    margin: 10px;
+
+    &:hover {
+        background-color: orange !important;
+        color: white;
+        transition: 200ms;
+    }
+}
