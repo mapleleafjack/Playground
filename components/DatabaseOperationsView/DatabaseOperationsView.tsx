@@ -27,23 +27,27 @@ const DatabaseOperationsView: FC = () => {
     const addThingyCB = async () => {
         setLoading(true)
         try {
-            await addThingy("thingy");
-            getThingyCB()
+            let new_elm = await addThingy("thingy");
+            data.push(new_elm)
+            setData(data)
         } catch (err) {
-            setLoading(false)
             console.log(err);
         }
+        setLoading(false)
     };
 
     const deleteThingyCB = async (thingy_id: string) => {
         setLoading(true)
         try {
             await removeThingy(thingy_id);
-            getThingyCB()
+
+            setData(data.filter((elm) => {
+                return elm.id != thingy_id
+            }))
         } catch (err) {
             console.log(err);
-            setLoading(false)
         }
+        setLoading(false)
     }
 
 
@@ -70,7 +74,7 @@ const DatabaseOperationsView: FC = () => {
             </div >
 
             <div className={`${s.panel}`}>
-                {loading ? "loading..." : (data ? data.map((elm) =>
+                {(data ? data.map((elm) =>
                     <Card key={elm.id} className={`${s.card}`} interactive={true} elevation={Elevation.TWO} onClick={() => {
                         deleteThingyCB(elm.id)
                     }}>
@@ -79,7 +83,7 @@ const DatabaseOperationsView: FC = () => {
                     </Card>
                 ) : "Click to load data")}
 
-                {!loading && data && data.length == 0 && "No thingies in the DB, add some"}
+                {data && data.length == 0 && "No thingies in the DB, add some"}
             </div>
 
         </div>
