@@ -36,17 +36,15 @@ const DatabaseOperationsView: FC = () => {
             </div >
 
             <div className={`${s.panel}`}>
-                {loading ? <Spinner /> :
-                    <>
-                        <div className={`${s.elementsPanel}`}>
-                            <ElementCards data={data} callback={refreshData} />
-                        </div>
+                <>
+                    <div className={`${s.elementsPanel}`}>
+                        {loading ? <Spinner /> : <ElementCards data={data} callback={refreshData} />}
+                    </div>
 
-                        <div className={`${s.canvasPanel}`}>
-                            <CanvasView data={data} />
-                        </div>
-                    </>
-                }
+                    <div className={`${s.canvasPanel}`}>
+                        <CanvasView data={data} />
+                    </div>
+                </>
             </div>
 
         </div>
