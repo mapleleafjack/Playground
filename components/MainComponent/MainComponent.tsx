@@ -1,6 +1,7 @@
 import { Alignment, Button, Navbar } from '@blueprintjs/core';
 import DatabaseOperationsView from 'components/MainComponent/DatabaseOperationsView/DatabaseOperationsView';
 import React, { FC, useState } from 'react';
+import AudioVisualiserView from './AudioVisualiserView/AudioVisualiserView';
 import s from './MainComponent.module.scss';
 interface ComponentProps {
     title: string;
@@ -14,6 +15,8 @@ const MainComponent: FC<ComponentProps> = ({ title }) => {
         switch (active_tab) {
             case "database":
                 return <DatabaseOperationsView />
+            case "music":
+                return <AudioVisualiserView />
             default:
                 return "Under construction"
         }
@@ -36,10 +39,10 @@ const MainComponent: FC<ComponentProps> = ({ title }) => {
                 />
                 <Button
                     className="bp4-minimal"
-                    icon="document"
-                    text="MIDI"
+                    icon="music"
+                    text="Visualiser"
                     onClick={() => {
-                        setActiveTab("midi")
+                        setActiveTab("music")
                     }}
                 />
             </Navbar.Group>
