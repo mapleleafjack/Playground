@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 
 import s from './AudioVisualiserView.module.scss';
 
-const createElement = (numberOfEls: int) => {
+const createElement = (numberOfEls: number) => {
     var elements = [];
 
     for (let i = 0; i < numberOfEls; i++) {
