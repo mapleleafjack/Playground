@@ -1,9 +1,8 @@
-import { Button, Card, Elevation, Spinner } from '@blueprintjs/core';
-import axios from 'axios';
+import { Spinner } from '@blueprintjs/core';
 import ElementCards from 'components/MainComponent/DatabaseOperationsView/ElementCards/ElementCards';
 import React, { FC, useEffect, useState } from 'react';
 import { DataThingy } from 'types';
-import { addThingy, getThingy, removeThingy } from 'utils/api/thingy';
+import { getThingy } from 'utils/api/thingy';
 import CanvasView from './CanvasView/CanvasView';
 import DatabaseOperations from './DatabaseOperations/DatabaseOperations';
 import s from './DatabaseOperatiosView.module.scss';

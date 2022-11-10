@@ -1,7 +1,6 @@
 import { Button } from '@blueprintjs/core';
 import React, { FC } from 'react';
-import { DataThingy } from 'types';
-import { addThingy, getThingy } from 'utils/api/thingy';
+import { addThingy } from 'utils/api/thingy';
 
 interface ComponentProps {
     refreshData: () => any;

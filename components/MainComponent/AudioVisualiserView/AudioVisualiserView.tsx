@@ -1,4 +1,5 @@
-import React, { FC, useEffect, useState } from 'react';
+import { NumeroContext } from 'lib/audioProvider';
+import React, { FC, useContext, useEffect, useState } from 'react';
 
 import s from './AudioVisualiserView.module.scss';
 
@@ -20,6 +21,8 @@ const createElement = (numberOfEls: number) => {
 }
 
 const AudioVisualiserView: FC = () => {
+
+    const numero = useContext(NumeroContext)
 
     const idleAnimation = (fps: number) => {
 
@@ -56,12 +59,12 @@ const AudioVisualiserView: FC = () => {
     }
 
     useEffect(() => {
-        idleAnimation(120)
+        numero && idleAnimation(numero)
     }, [])
 
-    return <p className={`${s.wrapper}`}>
+    return <div className={`${s.wrapper}`}>
         <div className={`${s.mainwheel}`}>{createElement(100)}</div>
-    </p>
+    </div>
 };
 
 export default AudioVisualiserView;

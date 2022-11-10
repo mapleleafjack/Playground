@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { FC } from 'react';
 import { DataThingy } from 'types';
 import { Canvas } from '@react-three/fiber'
 
@@ -10,7 +10,7 @@ const loadData = (data: DataThingy[]) => {
     let pos = (data.length) * -1;
 
     let element = data.map(elm => {
-        let dato = <mesh position={[pos, 0, 0]} scale={[3, 3, 3]}>
+        let dato = <mesh key={elm.id} position={[pos, 0, 0]} scale={[3, 3, 3]}>
             <boxBufferGeometry attach="geometry" />
             <meshBasicMaterial attach="material" color="orange" opacity={1} transparent />
         </mesh>
