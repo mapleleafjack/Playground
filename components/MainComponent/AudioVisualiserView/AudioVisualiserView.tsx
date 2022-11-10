@@ -20,10 +20,10 @@ const createElement = (numberOfEls: number) => {
 }
 
 const AudioVisualiserView: FC = () => {
-    const idleAnimation = () => {
+
+    const idleAnimation = (fps: number) => {
 
         let next_elm = 0
-
         var drawAlt = function () {
             for (let i = 0; i < 100; i++) {
                 const hue = Math.round(360 / 100 * i);
@@ -48,13 +48,15 @@ const AudioVisualiserView: FC = () => {
                 next_elm = 0
             }
 
-            requestAnimationFrame(drawAlt);
+            setTimeout(() => {
+                requestAnimationFrame(drawAlt);
+            }, 1000 / fps);
         }
-        let timer = requestAnimationFrame(drawAlt);
+        requestAnimationFrame(drawAlt);
     }
 
     useEffect(() => {
-        idleAnimation()
+        idleAnimation(120)
     }, [])
 
     return <p className={`${s.wrapper}`}>
