@@ -32,11 +32,7 @@ const createElement = (numberOfEls: number, flowerShape: string) => {
 }
 
 export const redrawFlowerView = (data: Uint8Array, flowerShape: string) => {
-    // Recreate all the UI elements using the updated flowerShape and data values
-    const elements = createElement(100, flowerShape);
-
-    // Clear the existing elements from the DOM
-    document.querySelectorAll(`.${s.el}`).forEach(el => el.remove());
+    //to do implementation
 }
 
 export const updateFlowerView = (data: Uint8Array, flowerShape: string) => {
