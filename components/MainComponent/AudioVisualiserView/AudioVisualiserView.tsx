@@ -51,7 +51,7 @@ const AudioVisualiserView: FC = () => {
 
                 if (el) {
                     el.style.transform = "rotate(" + rotate + "deg" + ") scale(" + scale + ")";
-                    el.style.backgroundColor = "orange";
+                    // el.style.backgroundColor = "orange";
                 }
             }
 
