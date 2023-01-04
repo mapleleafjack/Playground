@@ -25,7 +25,8 @@
     "**/*.ts",
     "**/*.tsx",
     "components/TestComponent/TestComponent.test.js",
-    "components/MainComponent/MainComponent.test.js"
+    "components/MainComponent/MainComponent.test.js",
+    "components/MainComponent/AudioVisualiserView/FlowerView/FlowerView.test.js"
   ],
   "exclude": [
     "node_modules"
