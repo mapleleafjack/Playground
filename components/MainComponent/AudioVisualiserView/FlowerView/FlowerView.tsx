@@ -62,7 +62,7 @@ type FlowerViewProps = {
 export const FlowerView: FC<FlowerViewProps> = ({ flowerShape }) => {
     return (
         <div className={`${s.wrapper}`}>
-            <div className={`${s.mainwheel}`}>{createElement(100, flowerShape)}</div>
+            <div data-testid="flower-view" className={`${s.mainwheel}`}>{createElement(100, flowerShape)}</div>
         </div>
     );
 }

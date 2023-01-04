@@ -12,7 +12,7 @@ describe("MainComponent", () => {
         render(
             <MainComponent />
         );
-        expect(screen.getAllByText("Main").length).toBeGreaterThan(0)
-        expect(screen.getAllByText("Main")[0]).toBeInTheDocument()
+        expect(screen.getAllByText("Visualiser").length).toBeGreaterThan(0)
+        expect(screen.getAllByText("Visualiser")[0]).toBeInTheDocument()
     })
 })
