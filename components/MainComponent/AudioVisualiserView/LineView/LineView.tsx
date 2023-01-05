@@ -1,14 +1,14 @@
-import { FC, useEffect, useRef } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import s from './LineView.module.scss';
 
 type LineViewProps = {
-    line_resolution: number
+    resolution: number
 }
 
-export const updateLineView = (data: Uint8Array, line_resolution: number) => {
-    for (let i = 0; i < line_resolution; i++) {
-        const translateX = (line_resolution) * i;
-        const scale = data[i] / line_resolution;
+export const updateLineView = (data: Uint8Array, resolution: number) => {
+    for (let i = 0; i < resolution; i++) {
+        const translateX = (resolution) * i;
+        const scale = data[i] / resolution;
 
         var el = document.getElementById("lineview" + i);
 
@@ -18,12 +18,12 @@ export const updateLineView = (data: Uint8Array, line_resolution: number) => {
     }
 };
 
-export const LineView: FC<LineViewProps> = ({ line_resolution }) => {
+export const LineView: FC<LineViewProps> = ({ resolution }) => {
     const createCanvas = () => {
         var elements = [];
-        for (let i = 0; i < line_resolution; i++) {
-            const hue = Math.round(360 / line_resolution * i);
-            const translateX = (i / line_resolution) * 100;
+        for (let i = 0; i < resolution; i++) {
+            const hue = Math.round(360 / resolution * i);
+            const translateX = (i / resolution) * 100;
 
             let style = {
                 "backgroundColor": "hsl(" + hue + ", 40%, 60%)",

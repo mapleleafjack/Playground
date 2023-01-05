@@ -2,13 +2,13 @@ import { FC, useEffect } from 'react';
 import s from './FlowerView.module.scss';
 
 type FlowerViewProps = {
-    element_number: number;
+    resolution: number;
 }
 
-export const updateFlowerView = (data: Uint8Array, element_number: number) => {
-    for (let i = 0; i < element_number; i++) {
-        const rotate = (360 / element_number) * i;
-        const scale = data[i] / element_number;
+export const updateFlowerView = (data: Uint8Array, resolution: number) => {
+    for (let i = 0; i < resolution; i++) {
+        const rotate = (360 / resolution) * i;
+        const scale = data[i] / resolution;
 
         var el = document.getElementById("elm" + i);
         if (el) {
@@ -17,14 +17,14 @@ export const updateFlowerView = (data: Uint8Array, element_number: number) => {
     }
 }
 
-export const FlowerView: FC<FlowerViewProps> = ({ element_number }) => {
+export const FlowerView: FC<FlowerViewProps> = ({ resolution: resolution }) => {
 
     const createCanvas = () => {
         const elements = [];
-        const rotateUnit = 360 / element_number;
+        const rotateUnit = 360 / resolution;
 
-        for (let i = 0; i < element_number; i++) {
-            const hue = Math.round(360 / element_number * i);
+        for (let i = 0; i < resolution; i++) {
+            const hue = Math.round(360 / resolution * i);
             const rotate = rotateUnit * i;
 
             let style = {

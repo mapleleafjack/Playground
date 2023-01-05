@@ -1,12 +1,14 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 
 import { FlowerView, updateFlowerView } from './FlowerView/FlowerView';
 import { LineView, updateLineView } from './LineView/LineView';
 
 const AudioVisualiserView: FC = () => {
+    const [selectedEffect, setFlowerShape] = useState("line");
+    const [animationId, setAnimationId] = useState<Timer>(null);
+
     const audioContext = new AudioContext();
     const analyser = audioContext.createAnalyser();
-    const [selectedEffect, setFlowerShape] = useState("line");
 
     navigator.mediaDevices
         .getUserMedia({ audio: true })
@@ -15,31 +17,45 @@ const AudioVisualiserView: FC = () => {
             microphone.connect(analyser);
         });
 
-    const idleAnimation = (fps: number) => {
-        var drawAlt = function () {
-            const data = new Uint8Array(analyser.frequencyBinCount);
-            analyser.getByteFrequencyData(data);
-
-            selectedEffect == "flower" && updateFlowerView(data, 100)
-            selectedEffect == "line" && updateLineView(data, 100)
-        };
-        setInterval(drawAlt, 1000 / fps);
-    };
-
     useEffect(() => {
-        idleAnimation(30)
-    }, [selectedEffect]);
+        console.log("useEffect")
+
+        const runAnimation = (fps: number) => {
+            var draw = function () {
+                const data = new Uint8Array(analyser.frequencyBinCount);
+                analyser.getByteFrequencyData(data);
+
+                selectedEffect == "flower" && updateFlowerView(data, 100)
+                selectedEffect == "line" && updateLineView(data, 100)
+            };
+            console.log("run Animation")
+
+            let animation = setInterval(draw, 1000 / fps)
+
+            console.log(animation)
+
+            setAnimationId(animation);
+            console.log(animationId)
+        };
+
+        if (animationId) {
+            console.log("clear Animation")
+            clearInterval(animationId)
+        }
+        runAnimation(30)
+    }, [selectedEffect]); // Only re-run the effect if selectedEffect changes
 
     return (
         <div>
-            {selectedEffect == "flower" && <FlowerView element_number={100} />}
-            {selectedEffect == "line" && <LineView line_resolution={100} />}
+            {selectedEffect == "flower" && <FlowerView resolution={100} />}
+            {selectedEffect == "line" && <LineView resolution={100} />}
 
             <label htmlFor="flower-shape-select">Choose flower shape:</label>
             <select
                 id="flower-shape-select"
                 value={selectedEffect}
                 onChange={(event) => {
+                    console.log("change!")
                     setFlowerShape(event.target.value)
                 }}
             >
