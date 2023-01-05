@@ -4,8 +4,10 @@ import { FlowerView, updateFlowerView } from './FlowerView/FlowerView';
 import { LineView, updateLineView } from './LineView/LineView';
 
 const AudioVisualiserView: FC = () => {
-    const [selectedEffect, setFlowerShape] = useState("line");
+    const [selectedEffect, setSelectedEffect] = useState("line");
+    const [resolution, setResolution] = useState(100);
     const [animationId, setAnimationId] = useState<Timer>(null);
+
     const firstUpdate = useRef(true);
 
     useEffect(() => {
@@ -29,8 +31,8 @@ const AudioVisualiserView: FC = () => {
                 const data = new Uint8Array(analyser.frequencyBinCount);
                 analyser.getByteFrequencyData(data);
 
-                selectedEffect == "flower" && updateFlowerView(data, 100)
-                selectedEffect == "line" && updateLineView(data, 100)
+                selectedEffect == "flower" && updateFlowerView(data, resolution)
+                selectedEffect == "line" && updateLineView(data, resolution)
             };
             setAnimationId(setInterval(draw, 1000 / fps));
         };
@@ -39,12 +41,12 @@ const AudioVisualiserView: FC = () => {
             clearInterval(animationId)
         }
         runAnimation(30)
-    }, [selectedEffect]);
+    }, [selectedEffect, resolution]);
 
     return (
         <div>
-            {selectedEffect == "flower" && <FlowerView resolution={100} />}
-            {selectedEffect == "line" && <LineView resolution={100} />}
+            {selectedEffect == "flower" && <FlowerView resolution={resolution} />}
+            {selectedEffect == "line" && <LineView resolution={resolution} />}
 
             <label htmlFor="flower-shape-select">Choose flower shape:</label>
             <select
@@ -52,12 +54,18 @@ const AudioVisualiserView: FC = () => {
                 value={selectedEffect}
                 onChange={(event) => {
                     console.log("change!")
-                    setFlowerShape(event.target.value)
+                    setSelectedEffect(event.target.value)
                 }}
             >
                 <option value="line">Line</option>
                 <option value="flower">Flower</option>
             </select>
+            <input
+                type="range"
+                min={0}
+                max={150}
+                onMouseUp={event => setResolution(event.currentTarget.valueAsNumber)}
+            />
         </div>
     );
 };
