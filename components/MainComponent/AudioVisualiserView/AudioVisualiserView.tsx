@@ -44,7 +44,7 @@ const AudioVisualiserView: FC = () => {
     }, [selectedEffect, resolution]);
 
     return (
-        <div className="AudioVisualiserUI">
+        <>
 
             <div className='component-layout'>
                 {selectedEffect == "flower" && <FlowerView resolution={resolution} />}
@@ -71,7 +71,7 @@ const AudioVisualiserView: FC = () => {
                     onMouseUp={event => setResolution(event.currentTarget.valueAsNumber)}
                 />
             </div>
-        </div>
+        </>
     );
 };
 export default AudioVisualiserView;
