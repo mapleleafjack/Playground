@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { FlowerView, updateFlowerView } from './FlowerView/FlowerView';
 import { LineView, updateLineView } from './LineView/LineView';
@@ -6,19 +6,23 @@ import { LineView, updateLineView } from './LineView/LineView';
 const AudioVisualiserView: FC = () => {
     const [selectedEffect, setFlowerShape] = useState("line");
     const [animationId, setAnimationId] = useState<Timer>(null);
-
-    const audioContext = new AudioContext();
-    const analyser = audioContext.createAnalyser();
-
-    navigator.mediaDevices
-        .getUserMedia({ audio: true })
-        .then((stream) => {
-            const microphone = audioContext.createMediaStreamSource(stream);
-            microphone.connect(analyser);
-        });
+    const firstUpdate = useRef(true);
 
     useEffect(() => {
-        console.log("useEffect")
+        if (firstUpdate.current) {
+            firstUpdate.current = false;
+            return;
+        }
+
+        const audioContext = new AudioContext();
+        const analyser = audioContext.createAnalyser();
+
+        navigator.mediaDevices
+            .getUserMedia({ audio: true })
+            .then((stream) => {
+                const microphone = audioContext.createMediaStreamSource(stream);
+                microphone.connect(analyser);
+            });
 
         const runAnimation = (fps: number) => {
             var draw = function () {
@@ -28,14 +32,7 @@ const AudioVisualiserView: FC = () => {
                 selectedEffect == "flower" && updateFlowerView(data, 100)
                 selectedEffect == "line" && updateLineView(data, 100)
             };
-            console.log("run Animation")
-
-            let animation = setInterval(draw, 1000 / fps)
-
-            console.log(animation)
-
-            setAnimationId(animation);
-            console.log(animationId)
+            setAnimationId(setInterval(draw, 1000 / fps));
         };
 
         if (animationId) {
@@ -43,7 +40,7 @@ const AudioVisualiserView: FC = () => {
             clearInterval(animationId)
         }
         runAnimation(30)
-    }, [selectedEffect]); // Only re-run the effect if selectedEffect changes
+    }, [selectedEffect]);
 
     return (
         <div>

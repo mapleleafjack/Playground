@@ -10,7 +10,7 @@ interface ComponentProps {
 
 const MainComponent: FC<ComponentProps> = ({ title }) => {
 
-    const [active_tab, setActiveTab] = useState("database");
+    const [active_tab, setActiveTab] = useState("music");
 
     const get_active_tab = () => {
         switch (active_tab) {
