@@ -1,6 +1,5 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import s from './LineView.module.scss';
-
 
 type LineViewProps = {
     data: Uint8Array;
@@ -8,6 +7,8 @@ type LineViewProps = {
 }
 
 export const LineView: FC<LineViewProps> = ({ data, line_resolution }) => {
+    const canvasRefs = useRef<(HTMLDivElement | null)[]>([]);
+
     useEffect(() => {
         updateLineView(data);
     }, [data, line_resolution]);
@@ -24,29 +25,39 @@ export const LineView: FC<LineViewProps> = ({ data, line_resolution }) => {
                 "transform": "translateX(" + translateX + "%) translateY(100%) scale(1)"
             };
 
-            elements.push(<div key={"elm_line" + i} id={"elm_line" + i} style={style} className={`${s.el}`}></div>)
+            elements.push(
+                <div
+                    key={"elm_line" + i}
+                    ref={(el) => {
+                        canvasRefs.current[i] = el;
+                    }}
+                    style={style}
+                    className={`${s.el}`}
+                ></div>
+            );
         }
 
-        return elements
-    }
+        return elements;
+    };
 
     const updateLineView = (data: Uint8Array) => {
         for (let i = 0; i < line_resolution; i++) {
             const translateX = (line_resolution) * i;
             const scale = data[i] / line_resolution;
 
-            var el = document.getElementById("elm_line" + i);
+            const el = canvasRefs.current[i];
 
             if (el) {
                 el.style.transform = "translateX(" + translateX + "%) translateY(100%) scale(" + scale + ")";
             }
         }
-    }
-
+    };
 
     return (
         <div className={`${s.wrapper}`}>
-            <div data-testid="flower-view" className={`${s.mainwheel}`}>{createCanvas()}</div>
+            <div data-testid="flower-view" className={`${s.mainwheel}`}>
+                {createCanvas()}
+            </div>
         </div>
     );
-}
+};

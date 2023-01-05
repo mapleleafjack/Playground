@@ -23,16 +23,17 @@ const AudioVisualiserView: FC = () => {
         };
         setInterval(drawAlt, 1000 / fps);
     };
-    const [selectedEffect, setFlowerShape] = useState("flower");
+    const [selectedEffect, setFlowerShape] = useState("line");
     const [data, setData] = useState(new Uint8Array(analyser.frequencyBinCount));
 
     useEffect(() => {
-        idleAnimation(60)
+        idleAnimation(30)
     }, [selectedEffect]);
 
     return (
         <div>
             {selectedEffect == "flower" && <FlowerView data={data} element_number={100} />}
+            {selectedEffect == "line" && <LineView data={data} line_resolution={100} />}
 
             <label htmlFor="flower-shape-select">Choose flower shape:</label>
             <select

@@ -56,7 +56,3 @@ export const FlowerView: FC<FlowerViewProps> = ({ data, element_number }) => {
         </div>
     );
 }
-
-function setState(arg0: number): [any, any] {
-    throw new Error('Function not implemented.');
-}
