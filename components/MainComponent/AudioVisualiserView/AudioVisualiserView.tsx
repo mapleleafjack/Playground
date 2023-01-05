@@ -36,7 +36,6 @@ const AudioVisualiserView: FC = () => {
         };
 
         if (animationId) {
-            console.log("clear Animation")
             clearInterval(animationId)
         }
         runAnimation(30)
