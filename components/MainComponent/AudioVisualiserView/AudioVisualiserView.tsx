@@ -1,6 +1,7 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
-import { FlowerView, updateFlowerView } from './FlowerView/FlowerView';
+import { FlowerView } from './FlowerView/FlowerView';
+import { LineView } from './LineView/LineView';
 
 const AudioVisualiserView: FC = () => {
     const audioContext = new AudioContext();
@@ -18,35 +19,27 @@ const AudioVisualiserView: FC = () => {
             const data = new Uint8Array(analyser.frequencyBinCount);
             analyser.getByteFrequencyData(data);
 
-            updateFlowerView(data, flowerShape)
-
-            setTimeout(() => {
-                requestAnimationFrame(drawAlt);
-            }, 1000 / fps);
+            setData(data);
         };
-        requestAnimationFrame(drawAlt);
+        setInterval(drawAlt, 1000 / fps);
     };
-    const [flowerShape, setFlowerShape] = useState("flower");
-
-
+    const [selectedEffect, setFlowerShape] = useState("flower");
+    const [data, setData] = useState(new Uint8Array(analyser.frequencyBinCount));
 
     useEffect(() => {
         idleAnimation(60)
-    }, [flowerShape]);
-
-    const onchangeShape = (value: string) => {
-        setFlowerShape(value)
-    }
+    }, [selectedEffect]);
 
     return (
         <div>
-            <FlowerView flowerShape={flowerShape} />
+            {selectedEffect == "flower" && <FlowerView data={data} element_number={100} />}
+
             <label htmlFor="flower-shape-select">Choose flower shape:</label>
             <select
                 id="flower-shape-select"
-                value={flowerShape}
+                value={selectedEffect}
                 onChange={(event) => {
-                    onchangeShape(event.target.value)
+                    setFlowerShape(event.target.value)
                 }}
             >
                 <option value="line">Line</option>
