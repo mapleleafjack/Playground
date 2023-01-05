@@ -44,28 +44,33 @@ const AudioVisualiserView: FC = () => {
     }, [selectedEffect, resolution]);
 
     return (
-        <div>
-            {selectedEffect == "flower" && <FlowerView resolution={resolution} />}
-            {selectedEffect == "line" && <LineView resolution={resolution} />}
+        <div className="AudioVisualiserUI">
 
-            <label htmlFor="flower-shape-select">Choose flower shape:</label>
-            <select
-                id="flower-shape-select"
-                value={selectedEffect}
-                onChange={(event) => {
-                    console.log("change!")
-                    setSelectedEffect(event.target.value)
-                }}
-            >
-                <option value="line">Line</option>
-                <option value="flower">Flower</option>
-            </select>
-            <input
-                type="range"
-                min={0}
-                max={150}
-                onMouseUp={event => setResolution(event.currentTarget.valueAsNumber)}
-            />
+            <div className='component-layout'>
+                {selectedEffect == "flower" && <FlowerView resolution={resolution} />}
+                {selectedEffect == "line" && <LineView resolution={resolution} />}
+            </div>
+
+            <div className='controls'>
+                <label htmlFor="flower-shape-select">Choose flower shape:</label>
+                <select
+                    id="flower-shape-select"
+                    value={selectedEffect}
+                    onChange={(event) => {
+                        console.log("change!")
+                        setSelectedEffect(event.target.value)
+                    }}
+                >
+                    <option value="line">Line</option>
+                    <option value="flower">Flower</option>
+                </select>
+                <input
+                    type="range"
+                    min={0}
+                    max={150}
+                    onMouseUp={event => setResolution(event.currentTarget.valueAsNumber)}
+                />
+            </div>
         </div>
     );
 };
