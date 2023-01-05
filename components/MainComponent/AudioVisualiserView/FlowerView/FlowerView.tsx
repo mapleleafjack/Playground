@@ -2,11 +2,22 @@ import { FC, useEffect } from 'react';
 import s from './FlowerView.module.scss';
 
 type FlowerViewProps = {
-    data: Uint8Array;
     element_number: number;
 }
 
-export const FlowerView: FC<FlowerViewProps> = ({ data, element_number }) => {
+export const updateFlowerView = (data: Uint8Array, element_number: number) => {
+    for (let i = 0; i < element_number; i++) {
+        const rotate = (360 / element_number) * i;
+        const scale = data[i] / element_number;
+
+        var el = document.getElementById("elm" + i);
+        if (el) {
+            el.style.transform = "rotate(" + rotate + "deg" + ") scale(" + scale + ")";
+        }
+    }
+}
+
+export const FlowerView: FC<FlowerViewProps> = ({ element_number }) => {
 
     const createCanvas = () => {
         const elements = [];
@@ -33,22 +44,6 @@ export const FlowerView: FC<FlowerViewProps> = ({ data, element_number }) => {
 
         return elements;
     };
-
-    const updateFlowerView = (data: Uint8Array) => {
-        for (let i = 0; i < element_number; i++) {
-            const rotate = (360 / element_number) * i;
-            const scale = data[i] / element_number;
-
-            var el = document.getElementById("elm" + i);
-            if (el) {
-                el.style.transform = "rotate(" + rotate + "deg" + ") scale(" + scale + ")";
-            }
-        }
-    }
-
-    useEffect(() => {
-        updateFlowerView(data);
-    }, [data]);
 
     return (
         <div className={`${s.wrapper}`}>

@@ -1,11 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
 
-import { FlowerView } from './FlowerView/FlowerView';
-import { LineView } from './LineView/LineView';
+import { FlowerView, updateFlowerView } from './FlowerView/FlowerView';
+import { LineView, updateLineView } from './LineView/LineView';
 
 const AudioVisualiserView: FC = () => {
     const audioContext = new AudioContext();
     const analyser = audioContext.createAnalyser();
+    const [selectedEffect, setFlowerShape] = useState("line");
 
     navigator.mediaDevices
         .getUserMedia({ audio: true })
@@ -19,12 +20,11 @@ const AudioVisualiserView: FC = () => {
             const data = new Uint8Array(analyser.frequencyBinCount);
             analyser.getByteFrequencyData(data);
 
-            setData(data);
+            selectedEffect == "flower" && updateFlowerView(data, 100)
+            selectedEffect == "line" && updateLineView(data, 100)
         };
         setInterval(drawAlt, 1000 / fps);
     };
-    const [selectedEffect, setFlowerShape] = useState("line");
-    const [data, setData] = useState(new Uint8Array(analyser.frequencyBinCount));
 
     useEffect(() => {
         idleAnimation(30)
@@ -32,8 +32,8 @@ const AudioVisualiserView: FC = () => {
 
     return (
         <div>
-            {selectedEffect == "flower" && <FlowerView data={data} element_number={100} />}
-            {selectedEffect == "line" && <LineView data={data} line_resolution={100} />}
+            {selectedEffect == "flower" && <FlowerView element_number={100} />}
+            {selectedEffect == "line" && <LineView line_resolution={100} />}
 
             <label htmlFor="flower-shape-select">Choose flower shape:</label>
             <select
@@ -49,5 +49,4 @@ const AudioVisualiserView: FC = () => {
         </div>
     );
 };
-
 export default AudioVisualiserView;

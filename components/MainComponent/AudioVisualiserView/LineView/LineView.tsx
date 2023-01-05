@@ -2,20 +2,25 @@ import { FC, useEffect, useRef } from 'react';
 import s from './LineView.module.scss';
 
 type LineViewProps = {
-    data: Uint8Array;
     line_resolution: number
 }
 
-export const LineView: FC<LineViewProps> = ({ data, line_resolution }) => {
-    const canvasRefs = useRef<(HTMLDivElement | null)[]>([]);
+export const updateLineView = (data: Uint8Array, line_resolution: number) => {
+    for (let i = 0; i < line_resolution; i++) {
+        const translateX = (line_resolution) * i;
+        const scale = data[i] / line_resolution;
 
-    useEffect(() => {
-        updateLineView(data);
-    }, [data, line_resolution]);
+        var el = document.getElementById("lineview" + i);
 
+        if (el) {
+            el.style.transform = "translateX(" + translateX + "%) translateY(100%) scale(" + scale + ")";
+        }
+    }
+};
+
+export const LineView: FC<LineViewProps> = ({ line_resolution }) => {
     const createCanvas = () => {
         var elements = [];
-
         for (let i = 0; i < line_resolution; i++) {
             const hue = Math.round(360 / line_resolution * i);
             const translateX = (i / line_resolution) * 100;
@@ -27,35 +32,19 @@ export const LineView: FC<LineViewProps> = ({ data, line_resolution }) => {
 
             elements.push(
                 <div
-                    key={"elm_line" + i}
-                    ref={(el) => {
-                        canvasRefs.current[i] = el;
-                    }}
+                    key={`lineview${i}`}
+                    id={`lineview${i}`}
                     style={style}
                     className={`${s.el}`}
                 ></div>
             );
         }
-
         return elements;
-    };
-
-    const updateLineView = (data: Uint8Array) => {
-        for (let i = 0; i < line_resolution; i++) {
-            const translateX = (line_resolution) * i;
-            const scale = data[i] / line_resolution;
-
-            const el = canvasRefs.current[i];
-
-            if (el) {
-                el.style.transform = "translateX(" + translateX + "%) translateY(100%) scale(" + scale + ")";
-            }
-        }
     };
 
     return (
         <div className={`${s.wrapper}`}>
-            <div data-testid="flower-view" className={`${s.mainwheel}`}>
+            <div data-testid="line-view" id="line-view" className={`${s.mainwheel}`}>
                 {createCanvas()}
             </div>
         </div>
