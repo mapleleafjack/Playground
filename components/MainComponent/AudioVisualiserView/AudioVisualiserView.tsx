@@ -7,15 +7,17 @@ import { LineView, updateLineView } from './LineView/LineView';
 const AudioVisualiserView: FC = () => {
     const [selectedEffect, setSelectedEffect] = useState("line");
     const [resolution, setResolution] = useState(100);
+    const [bottomFrequency, setBottomFrequency] = useState(0);
+    const [topFrequency, setTopFrequency] = useState(18000);
     const [animationId, setAnimationId] = useState<NodeJS.Timer | null>(null);
 
-    // const firstUpdate = useRef(true);
+    const firstUpdate = useRef(true);
 
     useEffect(() => {
-        // if (firstUpdate.current) {
-        //     firstUpdate.current = false;
-        //     return;
-        // }
+        if (firstUpdate.current) {
+            firstUpdate.current = false;
+            return;
+        }
 
         const audioContext = new AudioContext();
         const analyser = audioContext.createAnalyser();
@@ -34,7 +36,7 @@ const AudioVisualiserView: FC = () => {
                 analyser.getByteFrequencyData(data);
 
                 selectedEffect == "flower" && updateFlowerView(data, resolution)
-                selectedEffect == "line" && updateLineView(data, resolution)
+                selectedEffect == "line" && updateLineView(data, resolution, bottomFrequency, topFrequency)
             };
             setAnimationId(setInterval(draw, 1000 / fps));
         };
@@ -43,7 +45,13 @@ const AudioVisualiserView: FC = () => {
             clearInterval(animationId)
         }
         runAnimation(30)
-    }, [selectedEffect, resolution]);
+
+
+        console.log(bottomFrequency)
+        console.log(topFrequency)
+
+
+    }, [selectedEffect, resolution, bottomFrequency, topFrequency]);
 
     return (
         <>
@@ -59,20 +67,53 @@ const AudioVisualiserView: FC = () => {
                     id="flower-shape-select"
                     value={selectedEffect}
                     onChange={(event) => {
-                        console.log("change!")
-                        setSelectedEffect(event.target.value)
+                        setSelectedEffect(event.target.value);
                     }}
                 >
                     <option value="line">Line</option>
                     <option value="flower">Flower</option>
                 </select>
-                <input
-                    type="range"
-                    min={1}
-                    max={150}
-                    onMouseUp={event => setResolution(event.currentTarget.valueAsNumber)}
-                />
+
+                <div className="input-group">
+                    <label htmlFor="bottom_frequency">Bottom frequency:</label>
+                    <input
+                        id="bottom_frequency"
+                        type="number"
+                        min={0}
+                        max={18000}
+                        defaultValue={0}
+                        onChange={(event) => {
+                            setBottomFrequency(event.target.valueAsNumber);
+                        }}
+                    />
+                </div>
+
+                <div className="input-group">
+                    <label htmlFor="top_frequency">Top frequency:</label>
+                    <input
+                        id="top_frequency"
+                        type="number"
+                        min={1}
+                        max={18000}
+                        defaultValue={18000}
+                        onChange={(event) => {
+                            setTopFrequency(event.target.valueAsNumber);
+                        }}
+                    />
+                </div>
+
+                <div className="input-group">
+                    <label htmlFor="resolution_range">Resolution:</label>
+                    <input
+                        id="resolution_range"
+                        type="range"
+                        min={1}
+                        max={150}
+                        onMouseUp={(event) => setResolution(event.currentTarget.valueAsNumber)}
+                    />
+                </div>
             </div>
+
         </>
     );
 };

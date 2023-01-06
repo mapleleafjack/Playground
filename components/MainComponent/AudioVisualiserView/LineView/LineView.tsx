@@ -5,20 +5,30 @@ type LineViewProps = {
     resolution: number
 }
 
-export const updateLineView = (data: Uint8Array, resolution: number) => {
-    const maxHeight = 70;
+export const updateLineView = (data: Uint8Array, resolution: number, bottomFrequency: number, topFrequency: number) => {
+    const maxHeight = 50;
 
-    console.log(data)
+    const sampleRate = 44100;
+
+    const lowIndex = Math.floor(bottomFrequency / sampleRate * data.length);
+    const highIndex = Math.ceil(topFrequency / sampleRate * data.length);
+    const bandSize = Math.ceil((highIndex - lowIndex) / resolution);
 
     for (let i = 0; i < resolution; i++) {
-        const scale = (data[i] / 256) * maxHeight;
-        var el = document.getElementById("lineview" + i);
-
+        let sum = 0;
+        for (let j = lowIndex + i * bandSize; j < lowIndex + (i + 1) * bandSize; j++) {
+            sum += data[j];
+        }
+        const scale = (sum / (bandSize * 256)) * maxHeight;
+        const el = document.getElementById(`lineview${i}`);
         if (el) {
-            el.style.height = scale + "vw";
+            el.style.height = `${scale}vw`;
+            el.setAttribute("data-frequency-range", `${bottomFrequency + i * (topFrequency - bottomFrequency) / resolution} Hz - ${bottomFrequency + (i + 1) * (topFrequency - bottomFrequency) / resolution} Hz`);
         }
     }
 };
+
+
 export const LineView: FC<LineViewProps> = ({ resolution }) => {
     const createCanvas = () => {
         var elements = [];
