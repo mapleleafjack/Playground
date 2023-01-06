@@ -66,7 +66,7 @@ const AudioVisualiserView: FC = () => {
                 </select>
                 <input
                     type="range"
-                    min={0}
+                    min={1}
                     max={150}
                     onMouseUp={event => setResolution(event.currentTarget.valueAsNumber)}
                 />
