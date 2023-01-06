@@ -11,7 +11,7 @@ export const updateLineView = (data: Uint8Array, resolution: number) => {
     console.log(data)
 
     for (let i = 0; i < resolution; i++) {
-        const scale = data;
+        const scale = (data[i] / 256) * maxHeight;
         var el = document.getElementById("lineview" + i);
 
         if (el) {

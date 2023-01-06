@@ -7,7 +7,7 @@ import { LineView, updateLineView } from './LineView/LineView';
 const AudioVisualiserView: FC = () => {
     const [selectedEffect, setSelectedEffect] = useState("line");
     const [resolution, setResolution] = useState(100);
-    const [animationId, setAnimationId] = useState<Timer>(null);
+    const [animationId, setAnimationId] = useState<NodeJS.Timer | null>(null);
 
     const firstUpdate = useRef(true);
 
