@@ -3,6 +3,7 @@ import React, { FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { FlowerView, updateFlowerView } from './FlowerView/FlowerView';
 import { LineView, updateLineView } from './LineView/LineView';
 
+
 const AudioVisualiserView: FC = () => {
     const [selectedEffect, setSelectedEffect] = useState("line");
     const [resolution, setResolution] = useState(100);
@@ -18,6 +19,7 @@ const AudioVisualiserView: FC = () => {
 
         const audioContext = new AudioContext();
         const analyser = audioContext.createAnalyser();
+
 
         navigator.mediaDevices
             .getUserMedia({ audio: true })

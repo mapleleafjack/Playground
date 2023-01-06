@@ -8,8 +8,10 @@ type LineViewProps = {
 export const updateLineView = (data: Uint8Array, resolution: number) => {
     const maxHeight = 70;
 
+    console.log(data)
+
     for (let i = 0; i < resolution; i++) {
-        const scale = (data[i] / 256) * maxHeight;
+        const scale = data;
         var el = document.getElementById("lineview" + i);
 
         if (el) {
