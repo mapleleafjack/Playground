@@ -9,13 +9,13 @@ const AudioVisualiserView: FC = () => {
     const [resolution, setResolution] = useState(100);
     const [animationId, setAnimationId] = useState<NodeJS.Timer | null>(null);
 
-    const firstUpdate = useRef(true);
+    // const firstUpdate = useRef(true);
 
     useEffect(() => {
-        if (firstUpdate.current) {
-            firstUpdate.current = false;
-            return;
-        }
+        // if (firstUpdate.current) {
+        //     firstUpdate.current = false;
+        //     return;
+        // }
 
         const audioContext = new AudioContext();
         const analyser = audioContext.createAnalyser();
