@@ -10,10 +10,24 @@ const AnalyserProvider: React.FC<Props> = ({ children }) => {
     const [analyser, setAnalyser] = React.useState<AnalyserNode | null>(null);
 
     React.useEffect(() => {
-        try {
-            const audioContext = new AudioContext();
-            const analyser = audioContext.createAnalyser();
+        let timeoutId: any;
+        const audioContextAvailable = window.AudioContext;
 
+        if (!audioContextAvailable) {
+            timeoutId = setTimeout(() => {
+                console.error("AudioContext not available after waiting for 2 seconds");
+            }, 2000);
+        }
+
+        try {
+            const audioContext = audioContextAvailable
+                ? new window.AudioContext()
+                : null;
+            if (!audioContext) {
+                return;
+            }
+
+            const analyser = audioContext.createAnalyser();
 
             navigator.mediaDevices
                 .getUserMedia({ audio: true })
@@ -25,6 +39,10 @@ const AnalyserProvider: React.FC<Props> = ({ children }) => {
             setAnalyser(analyser);
         } catch (err) {
             console.log("Audio Context not available")
+        } finally {
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
         }
 
     }, []);

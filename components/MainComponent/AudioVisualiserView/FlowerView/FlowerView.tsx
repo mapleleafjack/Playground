@@ -48,7 +48,6 @@ const FlowerView: FC<FlowerViewProps> = ({ resolution, bottomFrequency, topFrequ
                         const x = centerX + center_radius_px * Math.cos(angle);
                         const y = centerY + center_radius_px * Math.sin(angle);
                         const line_width = Math.sqrt(resolution) * 0.8;
-                        const bar_radius = line_width / 2;  // added this line to calculate the radius of the rounded corners
 
                         canvasContext.save();
                         canvasContext.translate(x, y);
