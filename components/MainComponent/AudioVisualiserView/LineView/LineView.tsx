@@ -1,62 +1,79 @@
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
-import s from './LineView.module.scss';
+import { AnalyserContext } from 'lib/audioProvider';
+import { getBandAmplitude, getBarConstants } from 'lib/audioTools';
+import React, { FC, useEffect, useRef, useState } from 'react';
 
 type LineViewProps = {
-    resolution: number
+    resolution: number,
+    bottomFrequency: number,
+    topFrequency: number,
 }
 
-export const updateLineView = (data: Uint8Array, resolution: number, bottomFrequency: number, topFrequency: number) => {
-    const maxHeight = 40;
+const LineView: FC<LineViewProps> = ({ resolution, bottomFrequency, topFrequency }) => {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const analyser = React.useContext(AnalyserContext);
+    const [frameId, setFrameId] = useState<number | null>(null);
 
-    const sampleRate = 44100;
-
-    const lowIndex = Math.floor(bottomFrequency / sampleRate * data.length);
-    const highIndex = Math.ceil(topFrequency / sampleRate * data.length);
-    const bandSize = Math.ceil((highIndex - lowIndex) / resolution);
-
-    for (let i = 0; i < resolution; i++) {
-        let sum = 0;
-        for (let j = lowIndex + i * bandSize; j < lowIndex + (i + 1) * bandSize; j++) {
-            sum += data[j];
-        }
-        const scale = (sum / (bandSize * 256)) * maxHeight;
-        const el = document.getElementById(`lineview${i}`);
-        if (el) {
-            el.style.height = `${scale}vw`;
-            el.setAttribute("data-frequency-range", `${bottomFrequency + i * (topFrequency - bottomFrequency) / resolution} Hz - ${bottomFrequency + (i + 1) * (topFrequency - bottomFrequency) / resolution} Hz`);
-        }
-    }
-};
-
-
-export const LineView: FC<LineViewProps> = ({ resolution }) => {
-    const createCanvas = () => {
-        var elements = [];
+    const addStyle = (canvasContext: any, width: number) => {
+        const gradient = canvasContext.createLinearGradient(0, 0, width, 0);
         for (let i = 0; i < resolution; i++) {
             const hue = Math.round(360 / resolution * i);
+            gradient.addColorStop(i / resolution, `hsl(${hue}, 40%, 60%)`);
+        }
+        canvasContext.fillStyle = gradient;
+    }
 
-            let style = {
-                "width": `${100 / resolution}%`,
-                "backgroundColor": "hsl(" + hue + ", 40%, 60%)",
+    useEffect(() => {
+        if (analyser && canvasRef.current) {
+            const canvas = canvasRef.current;
+            const canvasContext = canvas.getContext('2d');
+
+            const renderFrame = () => {
+                const width = canvas.width;
+                const height = canvas.height;
+
+                const dataArray = new Uint8Array(analyser.frequencyBinCount);
+                analyser.getByteFrequencyData(dataArray);
+
+                if (canvasContext) {
+                    canvasContext.clearRect(0, 0, width, height);
+
+                    addStyle(canvasContext, width)
+
+                    const { lowIndex, bandSize } = getBarConstants(dataArray, bottomFrequency, topFrequency, resolution);
+
+                    for (let i = 0; i < resolution; i++) {
+                        const bandAmplitude = getBandAmplitude(i, dataArray, lowIndex, bandSize)
+                        const scale = (bandAmplitude / (bandSize * 256)) * height;
+                        const x = i * (width / resolution);
+                        const y = height - scale;
+
+                        canvasContext.fillRect(x, y, (width / resolution) * 0.8, scale);
+                    }
+                }
             };
 
-            elements.push(
-                <div
-                    key={`lineview${i}`}
-                    id={`lineview${i}`}
-                    style={style}
-                    className={`${s.el}`}
-                ></div>
-            );
+            const animate = () => {
+                setFrameId(requestAnimationFrame(animate));
+                renderFrame();
+            };
+
+            animate();
+
+            return () => {
+                if (frameId)
+                    cancelAnimationFrame(frameId);
+            };
         }
-        return elements;
-    };
+    }, [analyser, resolution, bottomFrequency, topFrequency]);
 
     return (
-        <div className={`${s.wrapper}`}>
-            <div data-testid="line-view" id="line-view" className={`${s.mainwheel}`}>
-                {createCanvas()}
-            </div>
-        </div>
+        <canvas
+            ref={canvasRef}
+            width={700}
+            height={700}
+            style={{ width: '700px', height: '700px', backgroundColor: "black", border: "1px solid white" }}
+        />
     );
 };
+
+export default LineView;

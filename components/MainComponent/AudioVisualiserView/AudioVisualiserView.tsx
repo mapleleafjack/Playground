@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 
 import FlowerView from './FlowerView/FlowerView';
-import NewLineView from './LineView/NewLineView';
+import LineView from './LineView/LineView';
 
 
 const AudioVisualiserView: FC = () => {
@@ -13,7 +13,7 @@ const AudioVisualiserView: FC = () => {
     return (
         <>
             <div style={{ width: '100%' }}>
-                <NewLineView resolution={resolution} bottomFrequency={bottomFrequency} topFrequency={topFrequency} />
+                <LineView resolution={resolution} bottomFrequency={bottomFrequency} topFrequency={topFrequency} />
                 <FlowerView resolution={resolution} bottomFrequency={bottomFrequency} topFrequency={topFrequency} />
             </div>
 

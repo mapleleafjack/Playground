@@ -11,3 +11,11 @@ export const getBarConstants = (dataArray: Uint8Array, bottomFrequency: number, 
         bandSize
     };
 }
+
+export const getBandAmplitude = (i: number, dataArray: Uint8Array, lowIndex: number, bandSize: number) => {
+    let bandAmplitude = 0;
+    for (let j = lowIndex + i * bandSize; j < lowIndex + (i + 1) * bandSize; j++) {
+        bandAmplitude += dataArray[j];
+    }
+    return bandAmplitude;
+}
