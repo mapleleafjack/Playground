@@ -1,5 +1,6 @@
 import { Alignment, Button, Navbar } from '@blueprintjs/core';
 import DatabaseOperationsView from 'components/MainComponent/DatabaseOperationsView/DatabaseOperationsView';
+import AnalyserProvider from 'lib/audioProvider';
 import NumeroProvider from 'lib/audioProvider';
 import React, { FC, useState } from 'react';
 import AudioVisualiserView from './AudioVisualiserView/AudioVisualiserView';
@@ -18,9 +19,9 @@ const MainComponent: FC<ComponentProps> = ({ title }) => {
                 return <DatabaseOperationsView />
             case "music":
                 return (
-                    <NumeroProvider>
+                    <AnalyserProvider>
                         <AudioVisualiserView />
-                    </NumeroProvider>
+                    </AnalyserProvider>
                 )
             default:
                 return "Under construction"

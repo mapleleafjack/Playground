@@ -1,16 +1,28 @@
 import { AnalyserContext } from 'lib/audioProvider';
+import { getBarConstants } from 'lib/audioTools';
 import React, { FC, useEffect, useRef, useState } from 'react';
 
-type FlowerViewProps = {
+type NewLineViewProps = {
     resolution: number,
     bottomFrequency: number,
     topFrequency: number,
 }
 
-const FlowerView: FC<FlowerViewProps> = ({ resolution, bottomFrequency, topFrequency }) => {
+const NewLineView: FC<NewLineViewProps> = ({ resolution, bottomFrequency, topFrequency }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const analyser = React.useContext(AnalyserContext);
     const [frameId, setFrameId] = useState<number | null>(null);
+
+    const addStyle = (canvasContext: any, width: number) => {
+        const gradient = canvasContext.createLinearGradient(0, 0, width, 0);
+
+        for (let i = 0; i < resolution; i++) {
+            const hue = Math.round(360 / resolution * i);
+            gradient.addColorStop(i / resolution, `hsl(${hue}, 40%, 60%)`);
+        }
+
+        canvasContext.fillStyle = gradient;
+    }
 
     useEffect(() => {
         if (analyser && canvasRef.current) {
@@ -20,21 +32,16 @@ const FlowerView: FC<FlowerViewProps> = ({ resolution, bottomFrequency, topFrequ
             const renderFrame = () => {
                 const width = canvas.width;
                 const height = canvas.height;
+
                 const dataArray = new Uint8Array(analyser.frequencyBinCount);
                 analyser.getByteFrequencyData(dataArray);
 
                 if (canvasContext) {
                     canvasContext.clearRect(0, 0, width, height);
 
-                    const sampleRate = 44100;
+                    addStyle(canvasContext, width)
 
-                    const lowIndex = Math.floor(bottomFrequency / sampleRate * dataArray.length);
-                    const highIndex = Math.ceil(topFrequency / sampleRate * dataArray.length);
-                    const bandSize = Math.ceil((highIndex - lowIndex) / resolution);
-
-                    const radius = 10;
-                    const centerX = canvas.width / 2;
-                    const centerY = canvas.height / 2;
+                    const { lowIndex, bandSize } = getBarConstants(dataArray, bottomFrequency, topFrequency, resolution);
 
                     for (let i = 0; i < resolution; i++) {
                         let sum = 0;
@@ -42,20 +49,12 @@ const FlowerView: FC<FlowerViewProps> = ({ resolution, bottomFrequency, topFrequ
                             sum += dataArray[j];
                         }
                         const scale = (sum / (bandSize * 256)) * height;
-                        const angle = (-Math.PI / 2) + (2 * Math.PI / resolution) * i;
 
-                        const x = centerX + radius * Math.cos(angle);
-                        const y = centerY + radius * Math.sin(angle);
+                        const x = i * (width / resolution);
+                        const y = height - scale;
 
-                        const line_width = Math.sqrt(resolution);
-
-                        canvasContext.save();
-                        canvasContext.translate(x, y);
-                        canvasContext.rotate(angle);
-                        canvasContext.fillRect(0, 0, scale, line_width);
-                        canvasContext.restore();
+                        canvasContext.fillRect(x, y, (width / resolution) * 0.8, scale);
                     }
-
                 }
             };
 
@@ -83,4 +82,4 @@ const FlowerView: FC<FlowerViewProps> = ({ resolution, bottomFrequency, topFrequ
     );
 };
 
-export default FlowerView;
+export default NewLineView;
