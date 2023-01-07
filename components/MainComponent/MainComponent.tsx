@@ -31,30 +31,28 @@ const MainComponent: FC<ComponentProps> = ({ title }) => {
 
     let component = <>
         <div className={`${s.mainLayout}`} >
-            <div className={`${s.navbar}`}>
-                <Navbar>
-                    <Navbar.Group align={Alignment.LEFT}>
-                        <Navbar.Heading>{title}</Navbar.Heading>
-                        <Navbar.Divider />
-                        <Button
-                            className="bp4-minimal"
-                            icon="home"
-                            text="Database operations"
-                            onClick={() => {
-                                setActiveTab("database")
-                            }}
-                        />
-                        <Button
-                            className="bp4-minimal"
-                            icon="music"
-                            text="Visualiser"
-                            onClick={() => {
-                                setActiveTab("music")
-                            }}
-                        />
-                    </Navbar.Group>
-                </Navbar>
-            </div>
+            <Navbar className={`${s.navbar}`}>
+                <Navbar.Group align={Alignment.LEFT}>
+                    <Navbar.Heading>{title}</Navbar.Heading>
+                    <Navbar.Divider />
+                    <Button
+                        className="bp4-minimal"
+                        icon="home"
+                        text="Database operations"
+                        onClick={() => {
+                            setActiveTab("database")
+                        }}
+                    />
+                    <Button
+                        className="bp4-minimal"
+                        icon="music"
+                        text="Visualiser"
+                        onClick={() => {
+                            setActiveTab("music")
+                        }}
+                    />
+                </Navbar.Group>
+            </Navbar>
 
             <div className={`${s.mainbody}`}>
                 {body_component}

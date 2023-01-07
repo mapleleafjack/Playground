@@ -83,7 +83,7 @@ const FlowerView: FC<FlowerViewProps> = ({ resolution, bottomFrequency, topFrequ
             ref={canvasRef}
             width={700}
             height={700}
-            data-testId={"flower-view"}
+            data-testid={"flower-view"}
             style={{ width: '700px', height: '700px', backgroundColor: "black", border: "1px solid white" }}
         />
     );
