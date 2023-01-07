@@ -1,7 +1,6 @@
 import { Alignment, Button, Navbar } from '@blueprintjs/core';
 import DatabaseOperationsView from 'components/MainComponent/DatabaseOperationsView/DatabaseOperationsView';
 import AnalyserProvider from 'lib/audioProvider';
-import NumeroProvider from 'lib/audioProvider';
 import React, { FC, useState } from 'react';
 import AudioVisualiserView from './AudioVisualiserView/AudioVisualiserView';
 import s from './MainComponent.module.scss';
