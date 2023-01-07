@@ -6,7 +6,7 @@ type LineViewProps = {
 }
 
 export const updateLineView = (data: Uint8Array, resolution: number, bottomFrequency: number, topFrequency: number) => {
-    const maxHeight = 50;
+    const maxHeight = 40;
 
     const sampleRate = 44100;
 

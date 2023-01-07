@@ -11,13 +11,13 @@ const AudioVisualiserView: FC = () => {
     const [topFrequency, setTopFrequency] = useState(18000);
     const [animationId, setAnimationId] = useState<NodeJS.Timer | null>(null);
 
-    const firstUpdate = useRef(true);
+    // const firstUpdate = useRef(true);
 
     useEffect(() => {
-        if (firstUpdate.current) {
-            firstUpdate.current = false;
-            return;
-        }
+        // if (firstUpdate.current) {
+        //     firstUpdate.current = false;
+        //     return;
+        // }
 
         const audioContext = new AudioContext();
         const analyser = audioContext.createAnalyser();
@@ -35,7 +35,7 @@ const AudioVisualiserView: FC = () => {
                 const data = new Uint8Array(analyser.frequencyBinCount);
                 analyser.getByteFrequencyData(data);
 
-                selectedEffect == "flower" && updateFlowerView(data, resolution)
+                selectedEffect == "flower" && updateFlowerView(data, resolution, bottomFrequency, topFrequency)
                 selectedEffect == "line" && updateLineView(data, resolution, bottomFrequency, topFrequency)
             };
             setAnimationId(setInterval(draw, 1000 / fps));
