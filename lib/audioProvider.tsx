@@ -15,7 +15,7 @@ const AnalyserProvider: React.FC<Props> = ({ children }) => {
 
         if (!audioContextAvailable) {
             timeoutId = setTimeout(() => {
-                console.error("AudioContext not available after waiting for 2 seconds");
+                alert("AudioContext not available after waiting for 2 seconds");
             }, 2000);
         }
 
