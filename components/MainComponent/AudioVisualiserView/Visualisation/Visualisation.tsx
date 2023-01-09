@@ -34,9 +34,16 @@ const Visualization: FC<VisualizationProps> = ({
             canvas.height = hRatio;
             canvas.width = wRatio;
 
+            canvas.setAttribute("data-resolution", resolution.toString())
+            canvas.setAttribute("data-bottom-frequency", bottomFrequency.toString())
+            canvas.setAttribute("data-top-frequency", topFrequency.toString())
+
             const renderFrame = () => {
                 const dataArray = new Uint8Array(analyser.frequencyBinCount);
                 analyser.getByteFrequencyData(dataArray);
+
+                if (frameId)
+                    canvas.setAttribute("data-animation-frame-id", frameId.toString())
 
                 if (canvasContext) {
                     render(canvasContext, dataArray, canvas);
