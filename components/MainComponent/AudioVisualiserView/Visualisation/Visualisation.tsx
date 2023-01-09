@@ -1,5 +1,5 @@
 import { AnalyserContext } from 'lib/audioProvider';
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 import s from './Visualisation.module.scss';
 
 type VisualizationProps = {
@@ -20,7 +20,7 @@ const Visualization: FC<VisualizationProps> = ({
     render,
 }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const analyser = React.useContext(AnalyserContext);
+    const analyser = useContext(AnalyserContext);
     const [frameId, setFrameId] = useState<number | null>(null);
 
     useEffect(() => {
@@ -59,6 +59,7 @@ const Visualization: FC<VisualizationProps> = ({
     return (<div className={`${s.container}`}>
         <canvas
             ref={canvasRef}
+            data-testid={"visualiser_canvas"}
             className={`${s.canvas}`}
         />
     </div>);

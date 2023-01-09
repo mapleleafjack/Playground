@@ -1,5 +1,5 @@
 import { getBandAmplitude, getBarConstants } from 'lib/audioTools';
-import Visualization from './Visualisation';
+import Visualization from '../Visualisation';
 
 export const LineVisualisation = (props: { resolution: number, bottomFrequency: number, topFrequency: number }): JSX.Element => {
     const { resolution, bottomFrequency, topFrequency } = props;
