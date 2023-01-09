@@ -10,7 +10,6 @@ interface ComponentProps {
 
 const MainComponent: FC<ComponentProps> = ({ title }) => {
     const [active_tab, setActiveTab] = useState("music");
-    const [micStarted, setMicStarted] = useState(false);
 
     const get_active_tab = () => {
         switch (active_tab) {
@@ -19,15 +18,7 @@ const MainComponent: FC<ComponentProps> = ({ title }) => {
             case "music":
                 return (
                     <>
-                        <Button onClick={() => {
-                            setMicStarted(!micStarted);
-                        }}>
-                            {micStarted ? 'Stop microphone' : 'Start microphone'}
-                        </Button>
-
-                        <AnalyserProvider microphoneStarted={micStarted}>
-                            <AudioVisualiserView />
-                        </AnalyserProvider>
+                        <AudioVisualiserView />
                     </>
 
                 )
