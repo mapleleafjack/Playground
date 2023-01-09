@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import AnalyserProvider from 'lib/audioProvider';
-import { Button } from '@blueprintjs/core';
+import { Alignment, Button, Intent, Navbar, NumericInput } from '@blueprintjs/core';
 import { FlowerVisualisation } from './Visualisation/VisualisationTypes/FlowerVisualisation';
 
 import s from './AudioVisualiserView.module.scss';
@@ -15,60 +15,69 @@ const AudioVisualiserView: FC = () => {
 
     return (
         <AnalyserProvider microphoneStarted={micStarted}>
-
             <div className={`${s.visualiserContainer}`} >
-                <div className='controls'>
-                    <Button onClick={() => {
-                        setMicStarted(!micStarted);
-                    }}>
-                        {micStarted ? 'Stop microphone' : 'Start microphone'}
-                    </Button>
+                <Navbar>
+                    <Navbar.Group align={Alignment.LEFT}>
+                        <Button
+                            className="bp4"
+                            icon="record"
+                            intent={micStarted ? Intent.DANGER : Intent.PRIMARY}
+                            onClick={() => {
+                                setMicStarted(!micStarted);
+                            }}>
+                            {micStarted ? 'Stop microphone' : 'Start microphone'}
+                        </Button>
+                        <Navbar.Divider />
 
-                    <div className="input-group">
-                        <label htmlFor="bottom_frequency">Bottom frequency:</label>
-                        <input
-                            id="bottom_frequency"
-                            type="number"
-                            min={0}
-                            max={18000}
-                            defaultValue={0}
-                            onChange={(event) => {
-                                setBottomFrequency(event.target.valueAsNumber);
-                            }}
-                        />
-                    </div>
+                        <div className="input-group">
+                            <label className="bp3-label" htmlFor="bottom_frequency">
+                                Bottom frequency:
+                            </label>
+                            <NumericInput
+                                id="bottom_frequency"
+                                min={0}
+                                max={18000}
+                                value={bottomFrequency}
+                                onValueChange={(value) => setBottomFrequency(value)}
+                            />
+                        </div>
 
-                    <div className="input-group">
-                        <label htmlFor="top_frequency">Top frequency:</label>
-                        <input
-                            id="top_frequency"
-                            type="number"
-                            min={1}
-                            max={18000}
-                            defaultValue={18000}
-                            onChange={(event) => {
-                                setTopFrequency(event.target.valueAsNumber);
-                            }}
-                        />
-                    </div>
+                        <Navbar.Divider />
 
-                    <div className="input-group">
-                        <label htmlFor="resolution_range">Resolution:</label>
-                        <input
-                            id="resolution_range"
-                            type="range"
-                            min={1}
-                            max={150}
-                            onMouseUp={(event) => setResolution(event.currentTarget.valueAsNumber)}
-                        />
-                    </div>
-                </div>
+                        <div className="input-group">
+                            <label className="bp3-label" htmlFor="bottom_frequency">
+                                Top frequency:
+                            </label>
+                            <NumericInput
+                                id="top_frequency"
+                                min={0}
+                                max={22000}
+                                value={topFrequency}
+                                onValueChange={(value) => setTopFrequency(value)}
+                            />
+                        </div>
+
+                        <Navbar.Divider />
+
+                        <div className="input-group">
+                            <label htmlFor="resolution_range">Resolution:</label>
+                            <input
+                                id="resolution_range"
+                                type="range"
+                                min={1}
+                                max={150}
+                                onMouseUp={(event) => setResolution(event.currentTarget.valueAsNumber)}
+                            />
+                        </div>
+                    </Navbar.Group>
+
+                </ Navbar>
                 <div className={`${s.visualiser}`}>
                     <LineVisualisation resolution={resolution} bottomFrequency={bottomFrequency} topFrequency={topFrequency} />
                     <FlowerVisualisation resolution={resolution} bottomFrequency={bottomFrequency} topFrequency={topFrequency} />
                 </div>
             </div>
-        </AnalyserProvider>
+        </AnalyserProvider >
 
     );
 };

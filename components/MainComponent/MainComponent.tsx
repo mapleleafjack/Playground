@@ -4,6 +4,7 @@ import AnalyserProvider from 'lib/audioProvider';
 import React, { FC, useState } from 'react';
 import AudioVisualiserView from './AudioVisualiserView/AudioVisualiserView';
 import s from './MainComponent.module.scss';
+
 interface ComponentProps {
     title: string;
 }
@@ -16,20 +17,13 @@ const MainComponent: FC<ComponentProps> = ({ title }) => {
             case "database":
                 return <DatabaseOperationsView />
             case "music":
-                return (
-                    <>
-                        <AudioVisualiserView />
-                    </>
-
-                )
+                return <AudioVisualiserView />
             default:
                 return "Under construction"
         }
     }
 
-    let body_component = get_active_tab()
-
-    let component = <>
+    return (
         <div className={`${s.mainLayout}`} >
             <Navbar className={`${s.navbar}`}>
                 <Navbar.Group align={Alignment.LEFT}>
@@ -37,30 +31,30 @@ const MainComponent: FC<ComponentProps> = ({ title }) => {
                     <Navbar.Divider />
                     <Button
                         className="bp4-minimal"
-                        icon="home"
-                        text="Database operations"
+                        icon="music"
+                        active={active_tab === "music"}
+                        text="Visualiser"
                         onClick={() => {
-                            setActiveTab("database")
+                            setActiveTab("music")
                         }}
                     />
                     <Button
                         className="bp4-minimal"
-                        icon="music"
-                        text="Visualiser"
+                        icon="home"
+                        active={active_tab === "database"}
+                        text="Database operations"
                         onClick={() => {
-                            setActiveTab("music")
+                            setActiveTab("database")
                         }}
                     />
                 </Navbar.Group>
             </Navbar>
 
             <div className={`${s.mainbody}`}>
-                {body_component}
+                {get_active_tab()}
             </div>
         </div>
-    </>
-
-    return component;
+    );
 };
 
 
