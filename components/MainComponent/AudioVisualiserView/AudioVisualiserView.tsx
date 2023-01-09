@@ -2,17 +2,16 @@ import React, { FC, useState } from 'react';
 
 import FlowerView from './FlowerView/FlowerView';
 import LineView from './LineView/LineView';
-
+import s from './AudioVisualiserView.module.scss';
 
 const AudioVisualiserView: FC = () => {
     const [resolution, setResolution] = useState(100);
     const [bottomFrequency, setBottomFrequency] = useState(0);
     const [topFrequency, setTopFrequency] = useState(18000);
 
-
     return (
         <>
-            <div style={{ width: '100%' }}>
+            <div className={`${s.visualiser}`}>
                 <LineView resolution={resolution} bottomFrequency={bottomFrequency} topFrequency={topFrequency} />
                 <FlowerView resolution={resolution} bottomFrequency={bottomFrequency} topFrequency={topFrequency} />
             </div>
@@ -57,7 +56,6 @@ const AudioVisualiserView: FC = () => {
                     />
                 </div>
             </div>
-
         </>
     );
 };

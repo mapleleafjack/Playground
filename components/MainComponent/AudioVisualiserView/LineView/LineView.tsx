@@ -1,6 +1,7 @@
 import { AnalyserContext } from 'lib/audioProvider';
 import { getBandAmplitude, getBarConstants } from 'lib/audioTools';
 import React, { FC, useEffect, useRef, useState } from 'react';
+import s from './LineView.module.scss';
 
 type LineViewProps = {
     resolution: number,
@@ -26,6 +27,12 @@ const LineView: FC<LineViewProps> = ({ resolution, bottomFrequency, topFrequency
         if (analyser && canvasRef.current) {
             const canvas = canvasRef.current;
             const canvasContext = canvas.getContext('2d');
+
+            var wRatio = window.innerWidth * 0.95;
+            var hRatio = window.innerHeight * 0.90;
+
+            canvas.height = hRatio;
+            canvas.width = wRatio;
 
             const renderFrame = () => {
                 const width = canvas.width;
@@ -66,13 +73,14 @@ const LineView: FC<LineViewProps> = ({ resolution, bottomFrequency, topFrequency
         }
     }, [analyser, resolution, bottomFrequency, topFrequency]);
 
+
     return (
-        <canvas
-            ref={canvasRef}
-            width={700}
-            height={700}
-            style={{ width: '700px', height: '700px', backgroundColor: "black", border: "1px solid white" }}
-        />
+        <div className={`${s.container}`}>
+            <canvas
+                ref={canvasRef}
+                className={`${s.canvas}`}
+            />
+        </div>
     );
 };
 

@@ -1,51 +1,61 @@
-import * as React from 'react';
+import { createContext, FC, ReactNode, useEffect, useState } from "react";
 
-export const AnalyserContext = React.createContext<AnalyserNode | null>(null);
+export const AnalyserContext = createContext<AnalyserNode | null>(null);
 
 type Props = {
-    children?: React.ReactNode;
+    children?: ReactNode;
+    microphoneStarted: Boolean;
 };
 
-const AnalyserProvider: React.FC<Props> = ({ children }) => {
-    const [analyser, setAnalyser] = React.useState<AnalyserNode | null>(null);
+const AnalyserProvider: FC<Props> = ({ children, microphoneStarted }) => {
+    const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
 
-    React.useEffect(() => {
-        let timeoutId: any;
-        const audioContextAvailable = window.AudioContext;
-
-        if (!audioContextAvailable) {
-            timeoutId = setTimeout(() => {
-                alert("AudioContext not available after waiting for 2 seconds");
-            }, 2000);
+    useEffect(() => {
+        let audioContext: AudioContext | null = new window.AudioContext()
+        if (!audioContext) {
+            return;
         }
 
-        try {
-            const audioContext = audioContextAvailable
-                ? new window.AudioContext()
-                : null;
-            if (!audioContext) {
-                return;
-            }
+        let hasStarted = false;
 
-            const analyser = audioContext.createAnalyser();
-
+        const setup = () => {
             navigator.mediaDevices
                 .getUserMedia({ audio: true })
                 .then((stream) => {
-                    const microphone = audioContext.createMediaStreamSource(stream);
-                    microphone.connect(analyser);
+                    if (audioContext) {
+                        const microphone = audioContext.createMediaStreamSource(stream);
+                        const analyser = audioContext.createAnalyser();
+                        microphone.connect(analyser);
+                        setAnalyser(analyser);
+                    }
                 });
 
-            setAnalyser(analyser);
-        } catch (err) {
-            console.log("Audio Context not available")
-        } finally {
-            if (timeoutId) {
-                clearTimeout(timeoutId);
+        };
+
+        const start = () => {
+            if (audioContext)
+                audioContext.resume();
+        };
+
+        const stop = () => {
+            if (audioContext) {
+                audioContext.close();
+            }
+        };
+
+        if (hasStarted) {
+            setup();
+        } else {
+            if (microphoneStarted) {
+                start();
+                setup();
             }
         }
 
-    }, []);
+        return () => {
+            stop();
+        };
+    }, [microphoneStarted]);
 
     return <AnalyserContext.Provider value={analyser}>{children}</AnalyserContext.Provider>;
 };
