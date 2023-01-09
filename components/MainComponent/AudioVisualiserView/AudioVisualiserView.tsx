@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import AnalyserProvider from 'lib/audioProvider';
 import { Button } from '@blueprintjs/core';
-import { FlowerVisualisation } from './Visualisation/FlowerVisualisation';
+import { FlowerVisualisation } from './Visualisation/VisualisationTypes/FlowerVisualisation';
 import { LineVisualisation } from './Visualisation/LineVisualisation';
 
 import s from './AudioVisualiserView.module.scss';
