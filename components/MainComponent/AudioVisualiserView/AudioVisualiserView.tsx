@@ -40,7 +40,7 @@ const AudioVisualiserView: FC = () => {
                 </div>
 
                 <div className="input-group">
-                    <label className="bp3-label" htmlFor="bottom_frequency">
+                    <label className="bp3-label" htmlFor="top_frequency">
                         Top frequency:
                     </label>
                     <NumericInput
