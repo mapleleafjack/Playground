@@ -1,10 +1,11 @@
 import React, { FC, useState } from 'react';
-
-import FlowerView from './FlowerView/FlowerView';
-import LineView from './LineView/LineView';
-import s from './AudioVisualiserView.module.scss';
 import AnalyserProvider from 'lib/audioProvider';
 import { Button } from '@blueprintjs/core';
+import { FlowerVisualisation } from './Visualisation/FlowerVisualisation';
+import { LineVisualisation } from './Visualisation/LineVisualisation';
+
+import s from './AudioVisualiserView.module.scss';
+
 
 const AudioVisualiserView: FC = () => {
     const [resolution, setResolution] = useState(100);
@@ -62,10 +63,9 @@ const AudioVisualiserView: FC = () => {
                         />
                     </div>
                 </div>
-
                 <div className={`${s.visualiser}`}>
-                    <LineView resolution={resolution} bottomFrequency={bottomFrequency} topFrequency={topFrequency} />
-                    <FlowerView resolution={resolution} bottomFrequency={bottomFrequency} topFrequency={topFrequency} />
+                    <LineVisualisation resolution={resolution} bottomFrequency={bottomFrequency} topFrequency={topFrequency} />
+                    <FlowerVisualisation resolution={resolution} bottomFrequency={bottomFrequency} topFrequency={topFrequency} />
                 </div>
             </div>
         </AnalyserProvider>
