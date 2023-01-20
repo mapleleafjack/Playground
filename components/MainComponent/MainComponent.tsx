@@ -38,15 +38,6 @@ const MainComponent: FC<ComponentProps> = ({ title }) => {
                             setActiveTab("music")
                         }}
                     />
-                    <Button
-                        className="bp4-minimal"
-                        icon="home"
-                        active={active_tab === "database"}
-                        text="Database operations"
-                        onClick={() => {
-                            setActiveTab("database")
-                        }}
-                    />
                 </Navbar.Group>
             </Navbar>
 
