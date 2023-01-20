@@ -11,12 +11,12 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Jack playground</title>
+        <title>Jack Demo Visualisation</title>
         <meta name="description" content="From the kitchen with love" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <MainComponent title="Jack's Next Playground" />
+      <MainComponent title="Visualiser Demo" />
 
       <footer className={styles.footer}>
         Thank you for paying attention
