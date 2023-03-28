@@ -3,6 +3,7 @@ import DatabaseOperationsView from 'components/MainComponent/DatabaseOperationsV
 import AnalyserProvider from 'lib/audioProvider';
 import React, { FC, useState } from 'react';
 import AudioVisualiserView from './AudioVisualiserView/AudioVisualiserView';
+import FractalView from './FractalView/FractalView';
 import s from './MainComponent.module.scss';
 
 interface ComponentProps {
@@ -16,6 +17,8 @@ const MainComponent: FC<ComponentProps> = ({ title }) => {
         switch (active_tab) {
             case "database":
                 return <DatabaseOperationsView />
+            case "fractal":
+                return <FractalView imageUrl='https://i.pinimg.com/originals/87/60/35/876035b21f02b2cf7af8acaf7b015569.jpg' />
             case "music":
                 return <AudioVisualiserView />
             default:
@@ -36,6 +39,15 @@ const MainComponent: FC<ComponentProps> = ({ title }) => {
                         text="Visualiser"
                         onClick={() => {
                             setActiveTab("music")
+                        }}
+                    />
+                    <Button
+                        className="bp4-minimal"
+                        icon="flash"
+                        active={active_tab === "fractal"}
+                        text="Fractal"
+                        onClick={() => {
+                            setActiveTab("fractal")
                         }}
                     />
                     <Button
