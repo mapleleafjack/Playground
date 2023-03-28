@@ -1,3 +1,4 @@
+import { Slider } from "@blueprintjs/core";
 import React, { useState, useEffect } from "react";
 
 type FractalViewProps = {
@@ -6,6 +7,7 @@ type FractalViewProps = {
 
 const FractalView: React.FC<FractalViewProps> = ({ imageUrl }) => {
     const [mirrorCount, setMirrorCount] = useState<number>(1);
+    const [zoomValue, setZoomValue] = useState<number>(1);
     const [imageLoaded, setImageLoaded] = useState<boolean>(false);
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
     const [dragStart, setDragStart] = useState<{ x: number, y: number } | null>(null);
@@ -15,19 +17,28 @@ const FractalView: React.FC<FractalViewProps> = ({ imageUrl }) => {
         setDragStart({ x: event.clientX, y: event.clientY });
     };
 
-    const handleMouseMove = (event: MouseEvent) => {
+    const handleMouseMove = (event: MouseEvent | TouchEvent) => {
+        event.preventDefault();
         if (dragStart) {
-            const deltaX = event.clientX - dragStart.x;
-            const deltaY = event.clientY - dragStart.y;
-            setPosition((prevPosition) => ({
-                x: prevPosition.x + deltaX,
-                y: prevPosition.y + deltaY,
-            }));
-            setDragStart({ x: event.clientX, y: event.clientY });
+            const clientX = "touches" in event ? event.touches[0].clientX : event.clientX;
+            const clientY = "touches" in event ? event.touches[0].clientY : event.clientY;
+
+            const deltaX = clientX - dragStart.x;
+            const deltaY = clientY - dragStart.y;
+
+            if (deltaX) {
+                setPosition((prevPosition) => ({
+                    x: prevPosition.x + deltaX,
+                    y: prevPosition.y + deltaY,
+                }));
+            }
+
+            setDragStart({ x: clientX, y: clientY });
 
             loadAndDrawImage(imageUrl);
         }
     };
+
 
     const handleMouseUp = () => {
         setDragStart(null);
@@ -39,7 +50,7 @@ const FractalView: React.FC<FractalViewProps> = ({ imageUrl }) => {
         img.src = url;
         img.onload = () => {
             setImageLoaded(true);
-            drawImage(img, mirrorCount, position.x, position.y);
+            drawImage(img, mirrorCount, position.x, position.y, zoomValue);
         };
     };
 
@@ -54,27 +65,33 @@ const FractalView: React.FC<FractalViewProps> = ({ imageUrl }) => {
             canvas.addEventListener("mousedown", handleMouseDown);
             canvas.addEventListener("mousemove", handleMouseMove);
             canvas.addEventListener("mouseup", handleMouseUp);
+            canvas.addEventListener("touchstart", handleMouseDown);
+            canvas.addEventListener("touchmove", handleMouseMove);
+            canvas.addEventListener("touchend", handleMouseUp);
 
             return () => {
                 canvas.removeEventListener("mousedown", handleMouseDown);
                 canvas.removeEventListener("mousemove", handleMouseMove);
                 canvas.removeEventListener("mouseup", handleMouseUp);
+                canvas.removeEventListener("touchstart", handleMouseDown);
+                canvas.removeEventListener("touchmove", handleMouseMove);
+                canvas.removeEventListener("touchend", handleMouseUp);
             };
         }
 
     }, [canvasRef, handleMouseDown, handleMouseMove, handleMouseUp]);
 
-    const drawImage = (img: HTMLImageElement, count: number, posX: number, posY: number) => {
+    const drawImage = (img: HTMLImageElement, count: number, posX: number, posY: number, zoomValue: number) => {
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext("2d");
-        const centerX = img.width / 2;
-        const centerY = img.height / 2;
+        const centerX = 500 / 2;
+        const centerY = 500 / 2;
         const radius = Math.min(centerX, centerY);
         const angleStep = (2 * Math.PI) / count;
 
         if (canvas) {
-            canvas.width = radius * 2;
-            canvas.height = radius * 2;
+            canvas.width = 500;
+            canvas.height = 500;
 
             for (let i = 0; i < count; i++) {
                 const startAngle = i * angleStep;
@@ -88,7 +105,7 @@ const FractalView: React.FC<FractalViewProps> = ({ imageUrl }) => {
                 ctx?.clip();
                 ctx?.translate(centerX, centerY);
                 ctx?.rotate(startAngle);
-                ctx?.scale(-1, 1);
+                ctx?.scale(zoomValue * -1, zoomValue);
                 ctx?.drawImage(
                     img,
                     posX,
@@ -105,22 +122,36 @@ const FractalView: React.FC<FractalViewProps> = ({ imageUrl }) => {
         }
     };
 
-    const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newCount = parseInt(event.target.value);
+    const handleSliderChange = (newCount: number) => {
         setMirrorCount(newCount);
         const img = new Image();
         img.src = imageUrl;
-        img.onload = () => drawImage(img, mirrorCount, position.x, position.y);
+        img.onload = () => drawImage(img, mirrorCount, position.x, position.y, zoomValue);
+    };
+    const handleZoomChange = (newZoom: number) => {
+        setZoomValue(newZoom);
+
+        const img = new Image();
+        img.src = imageUrl;
+        img.onload = () => drawImage(img, mirrorCount, position.x, position.y, zoomValue);
     };
 
     return (
         <>
-            <input
-                type="range"
-                min="1"
-                max="12"
+            <label>Slices:</label>
+            <Slider
+                min={1}
+                max={12}
                 value={mirrorCount}
                 onChange={handleSliderChange}
+            />
+            <label>Zoom:</label>
+            <Slider
+                min={-2}
+                max={4}
+                stepSize={0.1}
+                value={zoomValue}
+                onChange={handleZoomChange}
             />
             {imageLoaded ? (
                 <canvas ref={canvasRef} />
