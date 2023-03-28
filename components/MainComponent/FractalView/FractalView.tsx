@@ -1,11 +1,8 @@
-import { Slider } from "@blueprintjs/core";
+import { FileInput, Slider } from "@blueprintjs/core";
 import React, { useState, useEffect } from "react";
 
-type FractalViewProps = {
-    imageUrl: string;
-};
-
-const FractalView: React.FC<FractalViewProps> = ({ imageUrl }) => {
+const FractalView: React.FC = () => {
+    const [imageUrl, setImageURL] = useState<string>("./holy_sun.png");
     const [mirrorCount, setMirrorCount] = useState<number>(1);
     const [zoomValue, setZoomValue] = useState<number>(1);
     const [imageLoaded, setImageLoaded] = useState<boolean>(false);
@@ -29,7 +26,7 @@ const FractalView: React.FC<FractalViewProps> = ({ imageUrl }) => {
             if (deltaX) {
                 setPosition((prevPosition) => ({
                     x: prevPosition.x + deltaX,
-                    y: prevPosition.y + deltaY,
+                    y: prevPosition.y - deltaY,
                 }));
             }
 
@@ -84,23 +81,26 @@ const FractalView: React.FC<FractalViewProps> = ({ imageUrl }) => {
     const drawImage = (img: HTMLImageElement, count: number, posX: number, posY: number, zoomValue: number) => {
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext("2d");
-        const centerX = 500 / 2;
-        const centerY = 500 / 2;
-        const radius = Math.min(centerX, centerY);
-        const angleStep = (2 * Math.PI) / count;
 
         if (canvas) {
             canvas.width = 500;
             canvas.height = 500;
 
-            for (let i = 0; i < count; i++) {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const sliceWidth = canvas.width / 2;
+            const sliceHeight = canvas.height / 2;
+            const sliceRadius = Math.min(sliceWidth, sliceHeight);
+            const angleStep = (2 * Math.PI) / count;
+
+            for (let i = count - 1; i >= 0; i--) {
                 const startAngle = i * angleStep;
                 const endAngle = (i + 1) * angleStep;
 
                 ctx?.save();
                 ctx?.beginPath();
                 ctx?.moveTo(centerX, centerY);
-                ctx?.arc(centerX, centerY, radius, startAngle, endAngle);
+                ctx?.arc(centerX, centerY, sliceRadius, startAngle, endAngle);
                 ctx?.closePath();
                 ctx?.clip();
                 ctx?.translate(centerX, centerY);
@@ -112,10 +112,10 @@ const FractalView: React.FC<FractalViewProps> = ({ imageUrl }) => {
                     posY,
                     img.width,
                     img.height,
-                    -radius,
-                    -radius,
-                    radius * 2,
-                    radius * 2
+                    -sliceWidth,
+                    -sliceHeight,
+                    sliceWidth * 2,
+                    sliceHeight * 2
                 );
                 ctx?.restore();
             }
@@ -138,6 +138,16 @@ const FractalView: React.FC<FractalViewProps> = ({ imageUrl }) => {
 
     return (
         <>
+            <FileInput
+                text="Choose image..."
+                onInputChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    const file = event.target.files?.[0];
+                    if (file) {
+                        const url = URL.createObjectURL(file);
+                        setImageURL(url);
+                    }
+                }}
+            />
             <label>Slices:</label>
             <Slider
                 min={1}
@@ -147,7 +157,7 @@ const FractalView: React.FC<FractalViewProps> = ({ imageUrl }) => {
             />
             <label>Zoom:</label>
             <Slider
-                min={-2}
+                min={0}
                 max={4}
                 stepSize={0.1}
                 value={zoomValue}

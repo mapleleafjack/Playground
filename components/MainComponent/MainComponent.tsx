@@ -18,7 +18,7 @@ const MainComponent: FC<ComponentProps> = ({ title }) => {
             case "database":
                 return <DatabaseOperationsView />
             case "fractal":
-                return <FractalView imageUrl='./holy_sun.png' />
+                return <FractalView />
             case "music":
                 return <AudioVisualiserView />
             default:
