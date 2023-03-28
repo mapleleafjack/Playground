@@ -8,13 +8,36 @@ const FractalView: React.FC<FractalViewProps> = ({ imageUrl }) => {
     const [mirrorCount, setMirrorCount] = useState<number>(1);
     const [imageLoaded, setImageLoaded] = useState<boolean>(false);
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
+    const [dragStart, setDragStart] = useState<{ x: number, y: number } | null>(null);
+    const [position, setPosition] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
+
+    const handleMouseDown = (event: any) => {
+        setDragStart({ x: event.clientX, y: event.clientY });
+    };
+
+    const handleMouseMove = (event: MouseEvent) => {
+        if (dragStart) {
+            const deltaX = event.clientX - dragStart.x;
+            const deltaY = event.clientY - dragStart.y;
+            setPosition((prevPosition) => ({
+                x: prevPosition.x + deltaX,
+                y: prevPosition.y + deltaY,
+            }));
+            setDragStart({ x: event.clientX, y: event.clientY });
+        }
+    };
+
+    const handleMouseUp = () => {
+        setDragStart(null);
+        loadAndDrawImage(imageUrl);
+    };
 
     const loadAndDrawImage = (url: string) => {
         const img = new Image();
         img.src = url;
         img.onload = () => {
             setImageLoaded(true);
-            drawImage(img, mirrorCount);
+            drawImage(img, mirrorCount, position.x, position.y);
         };
     };
 
@@ -22,7 +45,24 @@ const FractalView: React.FC<FractalViewProps> = ({ imageUrl }) => {
         loadAndDrawImage(imageUrl);
     }, []);
 
-    const drawImage = (img: HTMLImageElement, count: number) => {
+    useEffect(() => {
+        const canvas = canvasRef.current;
+
+        if (canvas) {
+            canvas.addEventListener("mousedown", handleMouseDown);
+            canvas.addEventListener("mousemove", handleMouseMove);
+            canvas.addEventListener("mouseup", handleMouseUp);
+
+            return () => {
+                canvas.removeEventListener("mousedown", handleMouseDown);
+                canvas.removeEventListener("mousemove", handleMouseMove);
+                canvas.removeEventListener("mouseup", handleMouseUp);
+            };
+        }
+
+    }, [canvasRef, handleMouseDown, handleMouseMove, handleMouseUp]);
+
+    const drawImage = (img: HTMLImageElement, count: number, posX: number, posY: number) => {
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext("2d");
         const centerX = img.width / 2;
@@ -49,8 +89,8 @@ const FractalView: React.FC<FractalViewProps> = ({ imageUrl }) => {
                 ctx?.scale(-1, 1);
                 ctx?.drawImage(
                     img,
-                    0,
-                    0,
+                    posX,
+                    posY,
                     img.width,
                     img.height,
                     -radius,
@@ -68,7 +108,7 @@ const FractalView: React.FC<FractalViewProps> = ({ imageUrl }) => {
         setMirrorCount(newCount);
         const img = new Image();
         img.src = imageUrl;
-        img.onload = () => drawImage(img, newCount);
+        img.onload = () => drawImage(img, mirrorCount, position.x, position.y);
     };
 
     return (
