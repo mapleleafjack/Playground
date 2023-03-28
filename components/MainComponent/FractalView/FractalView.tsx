@@ -24,6 +24,8 @@ const FractalView: React.FC<FractalViewProps> = ({ imageUrl }) => {
                 y: prevPosition.y + deltaY,
             }));
             setDragStart({ x: event.clientX, y: event.clientY });
+
+            loadAndDrawImage(imageUrl);
         }
     };
 
