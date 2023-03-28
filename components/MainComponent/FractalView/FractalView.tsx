@@ -45,7 +45,7 @@ const FractalView: React.FC<FractalViewProps> = ({ imageUrl }) => {
 
     useEffect(() => {
         loadAndDrawImage(imageUrl);
-    }, []);
+    }, [imageLoaded, mirrorCount]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
