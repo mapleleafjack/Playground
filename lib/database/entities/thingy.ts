@@ -1,5 +1,5 @@
 import { DataThingy } from 'types';
-import { connectToDb } from './db';
+import { connectToDb } from '../db';
 
 
 export const getDataThingyById = async (

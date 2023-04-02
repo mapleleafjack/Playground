@@ -1,5 +1,5 @@
 import { Thingy } from '@prisma/client';
-import { deleteThingy, getThingies } from 'lib/thingy';
+import { deleteThingy, getThingies } from 'lib/database/entities/thingy';
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(

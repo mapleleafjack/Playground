@@ -1,5 +1,5 @@
 import { Thingy } from '@prisma/client';
-import { postThingy } from 'lib/thingy';
+import { postThingy } from 'lib/database/entities/thingy';
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(

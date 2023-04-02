@@ -1,6 +1,6 @@
 import { render, unmountComponentAtNode } from '@testing-library/react';
 import Visualization from './Visualisation';
-import { AnalyserContext } from 'lib/audioProvider';
+import { AnalyserContext } from 'components/ContextProviders/audioProvider';
 
 describe('Visualisation main component', () => {
 

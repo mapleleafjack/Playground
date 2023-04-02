@@ -1,5 +1,5 @@
 import { FileInput, Slider } from "@blueprintjs/core";
-import { AnalyserContext } from "lib/audioProvider";
+import { AnalyserContext } from "components/ContextProviders/audioProvider";
 import React, { useContext, useState, useEffect } from "react";
 
 const MotionFractalView: React.FC = () => {

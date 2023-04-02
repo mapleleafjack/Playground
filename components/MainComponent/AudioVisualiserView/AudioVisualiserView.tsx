@@ -1,11 +1,13 @@
 import React, { FC, useState } from 'react';
-import AnalyserProvider from 'lib/audioProvider';
+import AnalyserProvider from 'components/ContextProviders/audioProvider';
 import { Button, Intent, NumericInput } from '@blueprintjs/core';
 import { FlowerVisualisation } from './Visualisation/VisualisationTypes/FlowerVisualisation';
 
 import s from './AudioVisualiserView.module.scss';
 import { LineVisualisation } from './Visualisation/VisualisationTypes/LineVisualisation';
-import MotionFractalView from '../MotionFractalView/MotionFractalView';
+import MotionFractalView from './MotionFractalView/MotionFractalView';
+import RootFrequencyAnalyserProvider from 'components/ContextProviders/rootNoteProvider';
+import RootNoteDisplay from './RootNoteDisplay/RootNoteDisplay';
 
 
 const AudioVisualiserView: FC = () => {
@@ -67,6 +69,13 @@ const AudioVisualiserView: FC = () => {
                     <LineVisualisation resolution={resolution} bottomFrequency={bottomFrequency} topFrequency={topFrequency} />
                     <FlowerVisualisation resolution={resolution} bottomFrequency={bottomFrequency} topFrequency={topFrequency} />
                 </div>
+
+                <RootFrequencyAnalyserProvider
+                    microphoneStarted={micStarted}
+                    sensitivity={100}
+                >
+                    <RootNoteDisplay />
+                </RootFrequencyAnalyserProvider>
 
                 <div className={`${s.motionfractal}`}>
                     <MotionFractalView />

@@ -1,4 +1,4 @@
-import { AnalyserContext } from 'lib/audioProvider';
+import { AnalyserContext } from 'components/ContextProviders/audioProvider';
 import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 import s from './Visualisation.module.scss';
 
