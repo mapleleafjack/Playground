@@ -78,7 +78,9 @@ const AudioVisualiserView: FC = () => {
                 </RootFrequencyAnalyserProvider>
 
                 <div className={`${s.motionfractal}`}>
-                    <MotionFractalView />
+                    <MotionFractalView
+                        microphoneStarted={micStarted}
+                    />
                 </div>
             </div>
         </AnalyserProvider >

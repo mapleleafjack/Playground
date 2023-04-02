@@ -15,7 +15,7 @@ const Controls: React.FC<Props> = ({
     onZoomValueChange,
 }) => {
     return (
-        <>
+        <div>
             <label>Slices:</label>
             <Slider min={1} max={12} value={mirrorCount} onChange={onMirrorCountChange} />
             <label>Zoom:</label>
@@ -26,7 +26,7 @@ const Controls: React.FC<Props> = ({
                 value={zoomValue}
                 onChange={onZoomValueChange}
             />
-        </>
+        </div>
     );
 };
 
