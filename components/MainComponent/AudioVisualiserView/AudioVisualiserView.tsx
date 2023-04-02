@@ -5,6 +5,7 @@ import { FlowerVisualisation } from './Visualisation/VisualisationTypes/FlowerVi
 
 import s from './AudioVisualiserView.module.scss';
 import { LineVisualisation } from './Visualisation/VisualisationTypes/LineVisualisation';
+import MotionFractalView from '../MotionFractalView/MotionFractalView';
 
 
 const AudioVisualiserView: FC = () => {
@@ -65,6 +66,10 @@ const AudioVisualiserView: FC = () => {
                 <div className={`${s.visualiser}`}>
                     <LineVisualisation resolution={resolution} bottomFrequency={bottomFrequency} topFrequency={topFrequency} />
                     <FlowerVisualisation resolution={resolution} bottomFrequency={bottomFrequency} topFrequency={topFrequency} />
+                </div>
+
+                <div className={`${s.motionfractal}`}>
+                    <MotionFractalView />
                 </div>
             </div>
         </AnalyserProvider >

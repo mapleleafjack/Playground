@@ -5,6 +5,8 @@ import React, { FC, useState } from 'react';
 import AudioVisualiserView from './AudioVisualiserView/AudioVisualiserView';
 import FractalView from './FractalView/FractalView';
 import s from './MainComponent.module.scss';
+import MotionFractalView from './MotionFractalView/MotionFractalView';
+import { SineWaveComponent } from './SineWaveComponent/SineWaveComponent';
 
 interface ComponentProps {
     title: string;
@@ -18,7 +20,9 @@ const MainComponent: FC<ComponentProps> = ({ title }) => {
             case "database":
                 return <DatabaseOperationsView />
             case "fractal":
-                return <FractalView />
+                return <>
+                    <FractalView />
+                </>
             case "music":
                 return <AudioVisualiserView />
             default:
