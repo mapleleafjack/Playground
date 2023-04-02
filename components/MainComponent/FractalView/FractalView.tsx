@@ -1,12 +1,13 @@
 import { FileInput, Slider } from "@blueprintjs/core";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import Controls from "./Controls/Controls";
 
 const FractalView: React.FC = () => {
     const [imageUrl, setImageURL] = useState<string>("./holy_sun.png");
     const [mirrorCount, setMirrorCount] = useState<number>(1);
     const [zoomValue, setZoomValue] = useState<number>(1);
     const [imageLoaded, setImageLoaded] = useState<boolean>(false);
-    const canvasRef = React.useRef<HTMLCanvasElement>(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
     const [dragStart, setDragStart] = useState<{ x: number, y: number } | null>(null);
     const [position, setPosition] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
 
@@ -35,7 +36,6 @@ const FractalView: React.FC = () => {
             loadAndDrawImage(imageUrl);
         }
     };
-
 
     const handleMouseUp = () => {
         setDragStart(null);
@@ -148,20 +148,11 @@ const FractalView: React.FC = () => {
                     }
                 }}
             />
-            <label>Slices:</label>
-            <Slider
-                min={1}
-                max={12}
-                value={mirrorCount}
-                onChange={handleSliderChange}
-            />
-            <label>Zoom:</label>
-            <Slider
-                min={0}
-                max={4}
-                stepSize={0.1}
-                value={zoomValue}
-                onChange={handleZoomChange}
+            <Controls
+                mirrorCount={mirrorCount}
+                onMirrorCountChange={handleSliderChange}
+                zoomValue={zoomValue}
+                onZoomValueChange={handleZoomChange}
             />
             {imageLoaded ? (
                 <canvas ref={canvasRef} />
