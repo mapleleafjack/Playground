@@ -5,7 +5,8 @@ import React, { FC, useState } from 'react';
 import AudioVisualiserView from './AudioVisualiserView/AudioVisualiserView';
 import FractalView from './FractalView/FractalView';
 import s from './MainComponent.module.scss';
-import WebcamCanvas from './WebcamPixelator/WebcamPixelator';
+import VideoComponent from './VideoView/ThreeVideo/ThreeVideo';
+import WebcamCanvas from './VideoView/WebcamPixelator/WebcamPixelator';
 
 interface ComponentProps {
     title: string;
@@ -20,6 +21,8 @@ const MainComponent: FC<ComponentProps> = ({ title }) => {
                 return <DatabaseOperationsView />
             case "video":
                 return <WebcamCanvas />
+            case "3d":
+                return <VideoComponent />
             case "fractal":
                 return <FractalView />
             case "music":
@@ -60,6 +63,15 @@ const MainComponent: FC<ComponentProps> = ({ title }) => {
                         text="Video"
                         onClick={() => {
                             setActiveTab("video")
+                        }}
+                    />
+                    <Button
+                        className="bp4-minimal"
+                        icon="cube"
+                        active={active_tab === "3d"}
+                        text="3d"
+                        onClick={() => {
+                            setActiveTab("3d")
                         }}
                     />
                     <Button
