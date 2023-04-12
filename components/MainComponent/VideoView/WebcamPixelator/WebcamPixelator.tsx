@@ -15,6 +15,7 @@ const WebcamCanvas: React.FC<Props> = () => {
             return;
         }
 
+        //start the webcam stream
         navigator.mediaDevices
             .getUserMedia({ video: true })
             .then((stream) => {
@@ -31,7 +32,6 @@ const WebcamCanvas: React.FC<Props> = () => {
             return;
         }
 
-        // this function is very slow and laggy. It's called every frame. How can I optimize it?
         const draw = () => {
             if (!video.videoWidth || !video.videoHeight) {
                 setTimeout(draw, 100);
@@ -81,9 +81,6 @@ const WebcamCanvas: React.FC<Props> = () => {
                 canvas.width,
                 canvas.height
             );
-
-
-
 
             requestAnimationFrame(draw);
         };
