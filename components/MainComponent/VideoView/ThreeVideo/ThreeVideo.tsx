@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { DoubleSide } from 'three';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, Stars } from '@react-three/drei';
 
 interface VideoProps {
     url: string;
@@ -93,10 +93,12 @@ const VideoComponent: React.FC = () => {
             <Canvas>
                 <ambientLight />
                 <pointLight position={[10, 10, 10]} />
+
                 <VideoCube
                     url="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
                     useWebcam={isWebcamEnabled}
                 />
+                <Stars />
                 <OrbitControls />
             </Canvas>
         </div>
