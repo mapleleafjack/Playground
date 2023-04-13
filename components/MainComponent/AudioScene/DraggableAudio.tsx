@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, } from 'react';
 import { Sphere } from '@react-three/drei';
 import * as THREE from 'three';
 import { useThree } from '@react-three/fiber';
@@ -14,8 +14,10 @@ const DraggableAudio: React.FC<DraggableAudioProps> = ({ frequency, position, co
     const audioRef = useRef<THREE.PositionalAudio | null>(null);
     const gainNodeRef = useRef<GainNode | null>(null);
 
-    const [isPlaying, setIsPlaying] = useState(false); // Initialize isPlaying to false
-    const [sphereColor, setSphereColor] = useState('#FF0000'); // Set initial color to red
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
+    const [sphereColor, setSphereColor] = useState('#FF0000');
+    const [spherePosition, setSpherePosition] = useState(position);
 
     const { camera } = useThree();
 
@@ -67,12 +69,19 @@ const DraggableAudio: React.FC<DraggableAudioProps> = ({ frequency, position, co
                 setSphereColor(color);
             }
             setIsPlaying(!isPlaying);
+            setIsDragging(true)
+        }
+    };
+
+    const handleDrag = (e: any) => {
+        if (isDragging) {
+            setSpherePosition([e.point.x, e.point.y, e.point.z]);
         }
     };
 
     return (
-        <group onClick={handleClick}>
-            <Sphere args={[1, 32, 32]} ref={meshRef} position={position}>
+        <group onClick={handleClick} onPointerUp={handleDrag} onPointerDown={handleDrag} >
+            <Sphere args={[1, 32, 32]} ref={meshRef} position={spherePosition}>
                 <meshStandardMaterial attach="material" color={sphereColor} />
                 {audioRef.current && <primitive object={audioRef.current} />}
             </Sphere>
