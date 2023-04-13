@@ -14,8 +14,9 @@ const DraggableAudio: React.FC<DraggableAudioProps> = ({ frequency, position, co
     const audioRef = useRef<THREE.PositionalAudio | null>(null);
     const gainNodeRef = useRef<GainNode | null>(null);
 
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [sphereColor, setSphereColor] = useState(color);
+    const [isPlaying, setIsPlaying] = useState(false); // Initialize isPlaying to false
+    const [sphereColor, setSphereColor] = useState('#FF0000'); // Set initial color to red
+
     const { camera } = useThree();
 
     useEffect(() => {
@@ -31,8 +32,9 @@ const DraggableAudio: React.FC<DraggableAudioProps> = ({ frequency, position, co
         oscillator.frequency.setValueAtTime(frequency, context.currentTime);
 
         const gainNode = context.createGain();
-        gainNode.gain.setValueAtTime(0.5, context.currentTime); // Set gain value to 0.5
+        gainNode.gain.setValueAtTime(0, context.currentTime); // Set gain value to 0.5
         gainNodeRef.current = gainNode; // Set the gainNodeRef
+
         oscillator.connect(gainNode);
 
         // Connect GainNode to the PositionalAudio
@@ -54,13 +56,15 @@ const DraggableAudio: React.FC<DraggableAudioProps> = ({ frequency, position, co
     const handleClick = () => {
         if (audioRef.current && gainNodeRef.current) {
             if (isPlaying) {
-                gainNodeRef.current.disconnect(audioRef.current.panner);
+                gainNodeRef.current.gain.setValueAtTime(0, audioRef.current.context.currentTime); // Set gain to 0
                 audioRef.current.pause();
                 setSphereColor('#FF0000');
             } else {
                 gainNodeRef.current.connect(audioRef.current.panner);
+                gainNodeRef.current.gain.setValueAtTime(0.5, audioRef.current.context.currentTime); // Set gain to 0
+
                 audioRef.current.play();
-                setSphereColor(color); // Change to the color you want when playing
+                setSphereColor(color);
             }
             setIsPlaying(!isPlaying);
         }
