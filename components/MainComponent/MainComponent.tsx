@@ -7,6 +7,7 @@ import FractalView from './FractalView/FractalView';
 import s from './MainComponent.module.scss';
 import VideoComponent from './VideoView/ThreeVideo/ThreeVideo';
 import WebcamCanvas from './VideoView/WebcamPixelator/WebcamPixelator';
+import AudioScene from './AudioScene/AudioScene';
 
 interface ComponentProps {
     title: string;
@@ -21,6 +22,8 @@ const MainComponent: FC<ComponentProps> = ({ title }) => {
                 return <DatabaseOperationsView />
             case "video":
                 return <WebcamCanvas />
+            case "scene":
+                return <AudioScene />
             case "3d":
                 return <VideoComponent />
             case "fractal":
@@ -81,6 +84,15 @@ const MainComponent: FC<ComponentProps> = ({ title }) => {
                         text="Database"
                         onClick={() => {
                             setActiveTab("database")
+                        }}
+                    />
+                    <Button
+                        className="bp4-minimal"
+                        icon="map-marker"
+                        active={active_tab === "scene"}
+                        text="Audio Scene"
+                        onClick={() => {
+                            setActiveTab("scene")
                         }}
                     />
                 </Navbar.Group>
